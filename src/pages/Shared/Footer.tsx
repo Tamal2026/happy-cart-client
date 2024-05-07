@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <div>
+    <div className="max-w-screen-2xl mx-auto">
       <footer className="footer p-10 bg-base-200 text-base-content">
         <nav>
           <h6 className="footer-title">Services</h6>

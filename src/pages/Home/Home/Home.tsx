@@ -1,11 +1,9 @@
-
+import Hero from "../Hero/Hero";
 
 const Home = () => {
-    return (
-        <div>
-            <h1>This is Home</h1>
-        </div>
-    );
+  return (
+    <Hero></Hero>
+  );
 };
 
 export default Home;
