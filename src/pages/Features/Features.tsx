@@ -32,6 +32,11 @@ const Features = () => {
           <h1 className="text-xl font-bold mt-4">24/7 Support</h1>
           <h1 className="text-lg font-semibold">Fast support anytime</h1>
         </div>
+        <div className="h-[220px] rounded-md text-7xl flex flex-col justify-center items-center text-white w-[350px] bg-slate-400">
+          <BiSupport />
+          <h1 className="text-xl font-bold mt-4">24/7 Support</h1>
+          <h1 className="text-lg font-semibold">Fast support anytime</h1>
+        </div>
       </div>
     </div>
   );
