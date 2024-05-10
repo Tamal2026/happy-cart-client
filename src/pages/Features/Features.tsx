@@ -3,7 +3,7 @@ import { FaShippingFast } from "react-icons/fa";
 import { MdOutlineSecurityUpdateGood } from "react-icons/md";
 
 const Features = () => {
-  return (
+  return ( 
     <div className="flex justify-between max-w-screen-2xl my-3 mx-auto">
       <div className="flex flex-col items-center">
         <div className="h-[220px] rounded-md text-7xl flex flex-col justify-center items-center text-white w-[350px] bg-slate-400">
@@ -32,11 +32,7 @@ const Features = () => {
           <h1 className="text-xl font-bold mt-4">24/7 Support</h1>
           <h1 className="text-lg font-semibold">Fast support anytime</h1>
         </div>
-        <div className="h-[220px] rounded-md text-7xl flex flex-col justify-center items-center text-white w-[350px] bg-slate-400">
-          <BiSupport />
-          <h1 className="text-xl font-bold mt-4">24/7 Support</h1>
-          <h1 className="text-lg font-semibold">Fast support anytime</h1>
-        </div>
+   
       </div>
     </div>
   );

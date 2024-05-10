@@ -1,3 +1,6 @@
+import { FaArrowAltCircleRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
 const Navbar = () => {
 
     
@@ -27,11 +30,11 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <a>Home</a>
+               <Link to="/">Home</Link>
 
               </li>
               <li>
-                <a>Shop</a>
+              <Link to="/shop">Shop</Link>
                 <ul className="p-2">
                   <li>
                     <a>Apple</a>
@@ -44,15 +47,18 @@ const Navbar = () => {
               <li>
                 <a>Contact</a>
               </li>
+              <li>
+              <Link to="/login">Login</Link>
+              </li>
             </ul>
           </div>
-         <img src="../../../../public/assets/logo.png" className="h-[150px] w-[190px]" alt="" />
+         <img src="../../../../public/assets/logomain.png" className="h-[150px] w-[190px]" alt="" />
 
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <a>Home</a>
+            <Link to="/">Home</Link>
             </li>
             <li>
               <details>
@@ -69,6 +75,9 @@ const Navbar = () => {
             </li>
             <li>
               <a>Contact</a>
+            </li>
+            <li>
+            <Link to="/login">Login<FaArrowAltCircleRight /></Link>
             </li>
           </ul>
         </div>
