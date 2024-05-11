@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
@@ -7,9 +7,10 @@ import {
 } from "react-simple-captcha";
 
 const Login = () => {
-  useEffect(()=>{
-    loadCaptchaEnginge(6)
-  },[])
+  const captchaRef = useRef(null);
+  useEffect(() => {
+    loadCaptchaEnginge(6);
+  }, []);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleLogin = (e: any) => {
     e.preventDefault();
@@ -18,6 +19,13 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
     console.log(name, email, password);
+  };
+
+  const handleValidateCaptcha = () => {
+    const value = captchaRef.current.value
+    console.log(value)
+
+
   };
 
   return (
@@ -79,12 +87,18 @@ const Login = () => {
                 <LoadCanvasTemplate></LoadCanvasTemplate>
               </label>
               <input
+                ref={captchaRef}
                 type="text"
                 name="captcha"
                 placeholder="Enter the captcha"
                 className="input input-bordered"
-                required
               />
+              <button
+                onClick={handleValidateCaptcha}
+                className="btn hover:bg-gray-700 hover:text-white mt-4 w-full"
+              >
+                Validate
+              </button>
             </div>
             <div className="form-control mt-6">
               <input
