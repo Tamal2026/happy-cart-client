@@ -2,8 +2,6 @@ import { FaArrowAltCircleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-
-    
   return (
     <div className="max-w-screen-2xl mx-auto">
       <div className="navbar bg-base-100">
@@ -30,11 +28,10 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-               <Link to="/">Home</Link>
-
+                <Link to="/">Home</Link>
               </li>
               <li>
-              <Link to="/shop">Shop</Link>
+                <Link to="/shop">Shop</Link>
                 <ul className="p-2">
                   <li>
                     <a>Apple</a>
@@ -45,20 +42,23 @@ const Navbar = () => {
                 </ul>
               </li>
               <li>
-                <a>Contact</a>
+                <Link to="/contact">Contact</Link>
               </li>
               <li>
-              <Link to="/login">Login</Link>
+                <Link to="/login">Login</Link>
               </li>
             </ul>
           </div>
-         <img src="../../../../public/assets/logomain.png" className="h-[150px] w-[190px]" alt="" />
-
+          <img
+            src="../../../../public/assets/logomain.png"
+            className="h-[150px] w-[190px]"
+            alt=""
+          />
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-            <Link to="/">Home</Link>
+              <Link to="/">Home</Link>
             </li>
             <li>
               <details>
@@ -74,10 +74,13 @@ const Navbar = () => {
               </details>
             </li>
             <li>
-              <a>Contact</a>
+              <Link to="/contact">Contact</Link>
             </li>
             <li>
-            <Link to="/login">Login<FaArrowAltCircleRight /></Link>
+              <Link to="/login">
+                Login
+                <FaArrowAltCircleRight />
+              </Link>
             </li>
           </ul>
         </div>
