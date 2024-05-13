@@ -40,15 +40,13 @@ const Contact = () => {
                 className="w-[500px] ml-5 pl-4 pt-2 h-32 rounded-lg"
                 id=""
               ></textarea>
-               <input
+              <input
                 type="submit"
                 className="w-[500px] pl-4 h-12 bg-white text-green-500 mt-4  ml-5 rounded-lg hover:bg-orange-300 hover:text-white"
                 name="name"
-                
                 placeholder="Your Name"
                 id=""
               />
-              
             </form>
             <div>
               <div className="h-24 w-[400px] rounded-lg bg-white">Address</div>

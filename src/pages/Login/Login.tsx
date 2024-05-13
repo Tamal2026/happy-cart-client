@@ -1,14 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
-  LoadCanvasTemplateNoReload,
   validateCaptcha,
 } from "react-simple-captcha";
+import { AuthContext } from "../../providers/AuthProvider";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const captchaRef = useRef(null);
   const [disable, setDiable] = useState(true);
+  const {signIn} = useContext(AuthContext);
+
   useEffect(() => {
     loadCaptchaEnginge(6);
   }, []);
@@ -16,19 +19,22 @@ const Login = () => {
   const handleLogin = (e: any) => {
     e.preventDefault();
     const form = e.target;
-    const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
     console.log(name, email, password);
+    signIn(email , password).then(result =>{
+
+      const user = result.user;
+      console.log(user)
+    })
   };
 
   const handleValidateCaptcha = () => {
     const user_captcha_value = captchaRef.current.value;
     if (validateCaptcha(user_captcha_value)) {
       setDiable(false);
-    }
-    else{
-      setDiable(true)
+    } else {
+      setDiable(true);
     }
   };
 
@@ -45,18 +51,7 @@ const Login = () => {
         </div>
         <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
           <form className="card-body">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-bold">Name</span>
-              </label>
-              <input
-                type="text"
-                name="name"
-                placeholder="Enter your name"
-                className="input input-bordered"
-                required
-              />
-            </div>
+          
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-bold">Email</span>
@@ -112,6 +107,9 @@ const Login = () => {
                 className="btn btn-primary"
                 value="Login"
               />
+            </div>
+            <div>
+              <h1>New here ? Go to <Link className="text-green-500" to="/signUp">Sign-up</Link></h1>
             </div>
           </form>
         </div>
