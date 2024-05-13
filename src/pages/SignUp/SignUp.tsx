@@ -7,15 +7,12 @@ type Inputs = {
 };
 
 const SignUp = () => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
+  const { register, handleSubmit ,
+    formState: {errors}
+
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
-  console.log(watch("example"));
   return (
     <div>
       <div className="hero min-h-screen bg-base-200">
@@ -29,13 +26,15 @@ const SignUp = () => {
             </p>
           </div>
           <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-            <form className="card-body">
+            <form onSubmit={handleSubmit(onSubmit)} className="card-body">
               <div className="form-control">
                 <label className="label">
                   <span className="label-text font-bold">Name</span>
                 </label>
+
                 <input
                   type="text"
+                  {...register("name")}
                   name="name"
                   placeholder="Enter your name"
                   className="input input-bordered"
@@ -48,6 +47,7 @@ const SignUp = () => {
                 </label>
                 <input
                   type="email"
+                  {...register("email")}
                   placeholder="email"
                   className="input input-bordered"
                   required
@@ -59,10 +59,12 @@ const SignUp = () => {
                 </label>
                 <input
                   type="password"
+                  {...register("password",{minLength:6})}
                   placeholder="password"
                   className="input input-bordered"
                   required
                 />
+                {errors.password && <span className="text-sm m-1 text-red-500">Enter minimum 6 character</span>}
                 <label className="label">
                   <a href="#" className="label-text-alt link link-hover">
                     Forgot password?
@@ -70,7 +72,11 @@ const SignUp = () => {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <button className="btn btn-primary">Login</button>
+                <input
+                  type="submit"
+                  className="btn btn-primary bg-blue-400 text-white font-bold"
+                  value="Login"
+                />
               </div>
             </form>
           </div>
