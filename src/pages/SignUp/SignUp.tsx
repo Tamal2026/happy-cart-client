@@ -1,4 +1,7 @@
+import { useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../providers/AuthProvider";
 
 type Inputs = {
   name: string;
@@ -7,11 +10,22 @@ type Inputs = {
 };
 
 const SignUp = () => {
-  const { register, handleSubmit ,
-    formState: {errors}
+    const{ createUser }= useContext(AuthContext)
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data)
+    createUser(data.email,data.password)
+    .then(result =>{
+        const loggedUser = result.user;
+        console.log(loggedUser)
+    })
+  }
+
 
   return (
     <div>
@@ -59,12 +73,31 @@ const SignUp = () => {
                 </label>
                 <input
                   type="password"
-                  {...register("password",{minLength:6})}
+                  {...register("password", {
+                    minLength: 6,
+                    maxLength: 20,
+                    pattern: /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).*$/
+                    ,
+                  })}
                   placeholder="password"
                   className="input input-bordered"
                   required
                 />
-                {errors.password && <span className="text-sm m-1 text-red-500">Enter minimum 6 character</span>}
+                {errors.password?.type === "minLength" && (
+                  <span className="text-sm m-1 text-red-500">
+                    password must be 6 characters
+                  </span>
+                )}
+                {errors.password?.type === "maxLength" && (
+                  <span className="text-xs m-1 text-red-500">
+                    password must be less than 20 characters
+                  </span>
+                )}
+                {errors.password?.type === "pattern" && (
+                  <span className="text-xs m-1 text-red-500">
+                    password must have uppercase, one lowercase, one special character
+                  </span>
+                )}
                 <label className="label">
                   <a href="#" className="label-text-alt link link-hover">
                     Forgot password?
@@ -78,6 +111,9 @@ const SignUp = () => {
                   value="Login"
                 />
               </div>
+              <div>
+              <h1>Already have account ? Go to <Link className="text-green-500" to="/login">Login</Link></h1>
+            </div>
             </form>
           </div>
         </div>
