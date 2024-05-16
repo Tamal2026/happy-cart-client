@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 
 type Inputs = {
@@ -10,22 +10,29 @@ type Inputs = {
 };
 
 const SignUp = () => {
-    const{ createUser }= useContext(AuthContext)
+  const navigate = useNavigate()
+  const { createUser, updateUserProfile } = useContext(AuthContext);
 
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
-    createUser(data.email,data.password)
-    .then(result =>{
-        const loggedUser = result.user;
-        console.log(loggedUser)
-    })
-  }
-
+    console.log(data);
+    createUser(data.email, data.password).then((result) => {
+      const loggedUser = result.user;
+      console.log(loggedUser);
+      updateUserProfile(data.name)
+        .then(() => {
+          console.log("User profile info updated");
+          reset();
+          navigate('/')
+        })
+        .catch((error) => console.log(error));
+    });
+  };
 
   return (
     <div>
@@ -76,8 +83,8 @@ const SignUp = () => {
                   {...register("password", {
                     minLength: 6,
                     maxLength: 20,
-                    pattern: /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).*$/
-                    ,
+                    pattern:
+                      /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).*$/,
                   })}
                   placeholder="password"
                   className="input input-bordered"
@@ -95,7 +102,8 @@ const SignUp = () => {
                 )}
                 {errors.password?.type === "pattern" && (
                   <span className="text-xs m-1 text-red-500">
-                    password must have uppercase, one lowercase, one special character
+                    password must have uppercase, one lowercase, one special
+                    character
                   </span>
                 )}
                 <label className="label">
@@ -112,8 +120,13 @@ const SignUp = () => {
                 />
               </div>
               <div>
-              <h1>Already have account ? Go to <Link className="text-green-500" to="/login">Login</Link></h1>
-            </div>
+                <h1>
+                  Already have account ? Go to{" "}
+                  <Link className="text-green-500" to="/login">
+                    Login
+                  </Link>
+                </h1>
+              </div>
             </form>
           </div>
         </div>

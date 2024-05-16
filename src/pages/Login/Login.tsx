@@ -1,12 +1,15 @@
 import { useContext } from "react";
 
 import { AuthContext } from "../../providers/AuthProvider";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
   // const [disable, setDiable] = useState(true);
   const { signIn } = useContext(AuthContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.pathname || "/";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleLogin = (e: any) => {
@@ -17,11 +20,7 @@ const Login = () => {
     console.log(email, password);
     signIn(email, password).then((result) => {
       const user = result.user;
-     navigate('/').catch((error)=>{
-      console.error('Login Failed',error.message);
-      
-     })
-
+      navigate(from, { replace: true });
     });
   };
 
@@ -69,11 +68,7 @@ const Login = () => {
             </div>
 
             <div className="form-control mt-6">
-              <input
-                type="submit"
-                className="btn btn-primary"
-                value="Login"
-              />
+              <input type="submit" className="btn btn-primary" value="Login" />
             </div>
             <div>
               <h1>

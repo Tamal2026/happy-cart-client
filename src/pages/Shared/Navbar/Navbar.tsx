@@ -1,15 +1,14 @@
 import { useContext } from "react";
-import { FaArrowAltCircleRight } from "react-icons/fa";
+
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
+import { BiRightArrow } from "react-icons/bi";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
-  const handleLogOut = () =>{
-    logOut(auth).then(()=>{
-
-    }).catch()
-  }
+  const handleLogOut = () => {
+    logOut(user).then(() => {});
+  };
   return (
     <div className="max-w-screen-2xl mx-auto">
       <div className="navbar bg-base-100">
@@ -55,8 +54,11 @@ const Navbar = () => {
               <li>
                 {user ? (
                   <>
-                    {" "}
-                    <button className="btn btn-outline btn-warning">
+                    Login <BiRightArrow></BiRightArrow>
+                    <button
+                      onClick={handleLogOut}
+                      className="btn btn-outline btn-warning"
+                    >
                       Logout
                     </button>{" "}
                   </>
@@ -96,10 +98,23 @@ const Navbar = () => {
               <Link to="/contact">Contact</Link>
             </li>
             <li>
-              <Link to="/login">
-                Login
-                <FaArrowAltCircleRight />
-              </Link>
+              {user ? (
+                <>
+                  {" "}
+                  <button
+                    onClick={handleLogOut}
+                    className="btn btn-outline btn-warning"
+                  >
+                    Logout
+                  </button>{" "}
+                </>
+              ) : (
+                <>
+                  <Link to="/login">
+                    Login <BiRightArrow></BiRightArrow>
+                  </Link>{" "}
+                </>
+              )}
             </li>
           </ul>
         </div>
