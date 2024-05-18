@@ -1,0 +1,46 @@
+[
+  {
+    "name": "chicken",
+    "category": "meat",
+    "price": "10.99",
+    "short_desc": "Fresh chicken without skin",
+    "img": "https://i.ibb.co/VMqgpqq/chicken.png"
+  },
+
+  {
+    "name": "mutton",
+    "category": "meat",
+    "price": "15.99",
+    "short_desc": "Quality mutton cuts",
+    "img": "https://i.ibb.co/MssVXsy/mutton-meat.jpg"
+  },
+  {
+    "name": "pigeon",
+    "category": "meat",
+    "price": "19.99",
+    "short_desc": "Fresh pigeon meat",
+    "img": "https://i.ibb.co/VMhHzm0/piegeon-meat.png"
+  },
+
+  {
+    "name": "duck",
+    "category": "meat",
+    "price": "21.99",
+    "short_desc": "Tender duck meat",
+    "img": "https://i.ibb.co/z2Gkfgd/duck-meat.jpg"
+  },
+  {
+    "name": "mutton-leg",
+    "category": "meat",
+    "price": "17.99",
+    "short_desc": "Juicy mutton leg pieces",
+    "img": "https://i.ibb.co/xSmwsKf/mutton-leg.jpg"
+  },
+  {
+    "name": "skinoff chicken",
+    "category": "meat",
+    "price": "11.99",
+    "short_desc": "Skinless chicken pieces",
+    "img": "https://i.ibb.co/9gNhQjL/skinoff-chicken.jpg"
+  }
+]

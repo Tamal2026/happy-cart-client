@@ -1,0 +1,51 @@
+[
+    {
+      "name": "Potato",
+      "category": "Vegetable",
+      "price": 2.50,
+      "short_desc": "Versatile root vegetable",
+      "long_desc": "Potatoes are underground tubers that grow on the roots of the potato plant. They are a staple food in many cultures and can be prepared in numerous ways, including boiling, baking, frying, and mashing.",
+      "img": "https://i.ibb.co/C5hRGNW/vegetable-item-5.jpg"
+    },
+    {
+      "name": "Tomato",
+      "category": "Vegetable",
+      "price": 1.80,
+      "short_desc": "Juicy and flavorful fruit (commonly used as a vegetable)",
+      "long_desc": "Tomatoes are botanically classified as fruits but are commonly used as vegetables in cooking. They are known for their juicy texture and sweet-tart flavor. Tomatoes are used in salads, sauces, soups, and various other dishes.",
+      "img": "thttps://i.ibb.co/nMVPfBq/vegetable-item-1.jpg"
+    },
+    {
+      "name": "Carrot",
+      "category": "Vegetable",
+      "price": 1.20,
+      "short_desc": "Sweet and crunchy root vegetable",
+      "long_desc": "Carrots are root vegetables that are known for their bright orange color and sweet, crunchy texture. They are rich in beta-carotene, which is converted into vitamin A in the body. Carrots can be eaten raw, cooked, or juiced.",
+      "img": "https://i.ibb.co/xgYR1QG/carrot.jpg"
+    },
+    {
+      "name": "Broccoli",
+      "category": "Vegetable",
+      "price": 2.00,
+      "short_desc": "Nutritious green vegetable",
+      "long_desc": "Broccoli is a nutritious green vegetable that belongs to the cruciferous vegetable family. It is rich in vitamins, minerals, and antioxidants. Broccoli can be steamed, boiled, stir-fried, or eaten raw.",
+      "img": "https://i.ibb.co/4PVWwdv/vegetable-item-2.jpg"
+    },
+    {
+      "name": "Spinach",
+      "category": "Vegetable",
+      "price": 1.50,
+      "short_desc": "Leafy green vegetable packed with nutrients",
+      "long_desc": "Spinach is a leafy green vegetable that is loaded with nutrients such as vitamins A, C, and K, as well as iron, calcium, and folate. It has a mild, slightly sweet flavor and can be eaten raw in salads or cooked in various dishes.",
+      "img": "https://i.ibb.co/qnzC9Qf/photo-1576045057995-568f588f82fb.jpg"
+    },
+    {
+      "name": "Cucumber",
+      "category": "Vegetable",
+      "price": 1.00,
+      "short_desc": "Refreshing and hydrating vegetable",
+      "long_desc": "Cucumbers are long, cylindrical vegetables with a refreshing and hydrating taste. They are composed mainly of water and are low in calories. Cucumbers can be sliced and eaten raw, added to salads, or used to make pickles.",
+      "img": "https://i.ibb.co/y6F5PvK/cucumber.jpg"
+    }
+  ]
+  
