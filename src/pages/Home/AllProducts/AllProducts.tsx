@@ -1,19 +1,68 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../../../index.css";
 import { FaCartPlus } from "react-icons/fa";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 interface Product {
   name: string;
   price: number;
   img: string;
   category: string;
+  _id: string;
+  email: string;
 }
 
 const AllProducts = () => {
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useContext(AuthContext);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeCategory, setActiveCategory] = useState<string>("all");
+
+  const handleAddToCart = (product: Product) => {
+    if (user && user.email) {
+      const cartItem = {
+        itemId: product._id,
+        email: user.email,
+        name: product.name,
+        img: product.img,
+        price: product.price,
+      };
+      axiosSecure.post("/cart", cartItem).then((res) => {
+        if (res.data.insertedId) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+      // toDo : send cart item to the database
+    } else {
+      Swal.fire({
+        title: "You are not Logged In",
+        text: "Please login to add to the cart",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Login!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login", { state: { from: location } });
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     fetch("http://localhost:5000/all-products")
@@ -21,7 +70,6 @@ const AllProducts = () => {
       .then((data) => {
         setAllProducts(data);
         setLoading(false);
-     
       });
   }, []);
 
@@ -32,14 +80,18 @@ const AllProducts = () => {
         const index = acc.findIndex((item) => item.category === curr.category);
         if (index === -1) {
           acc.push(curr);
-        } else if (acc.filter((item) => item.category === curr.category).length < 4) {
+        } else if (
+          acc.filter((item) => item.category === curr.category).length < 4
+        ) {
           acc.push(curr);
         }
         return acc;
       }, []);
       setFilteredProducts(filtered);
     } else {
-      const filtered = allProducts.filter((product) => product.category === category)
+      const filtered = allProducts.filter(
+        (product) => product.category === category
+      );
       setFilteredProducts(filtered);
     }
   };
@@ -47,12 +99,42 @@ const AllProducts = () => {
   return (
     <div className=" w-[1400px] gap-4 mx-auto">
       <div className="flex items-center justify-evenly mr-12 ">
-        <h1 className="text-3xl my-8 font-medium justify-start">Shop Our Products</h1>
+        <h1 className="text-3xl my-8 font-medium justify-start">
+          Shop Our Products
+        </h1>
         <div>
-          <button className={`btn bg-amber-500 text-white  mr-5 ${activeCategory === "all" ? "active" : ""}`} onClick={() => filterProductsByCategory("all")}>All Products</button>
-          <button className={`btn bg-emerald-500 text-white  mr-5 ${activeCategory === "Vegetable" ? "active" : ""}`} onClick={() => filterProductsByCategory("Vegetable")}>Vegetables</button>
-          <button className={`btn text-white bg-cyan-500 mr-5 ${activeCategory === "Fruits" ? "active" : ""}`} onClick={() => filterProductsByCategory("Fruits")}>Fruits</button>
-          <button className={`btn bg-rose-500 text-white  mr-5 ${activeCategory === "meat" ? "active" : ""}`} onClick={() => filterProductsByCategory("meat")}>Meat</button>
+          <button
+            className={`btn bg-amber-500 text-white  mr-5 ${
+              activeCategory === "all" ? "active" : ""
+            }`}
+            onClick={() => filterProductsByCategory("all")}
+          >
+            All Products
+          </button>
+          <button
+            className={`btn bg-emerald-500 text-white  mr-5 ${
+              activeCategory === "Vegetable" ? "active" : ""
+            }`}
+            onClick={() => filterProductsByCategory("Vegetable")}
+          >
+            Vegetables
+          </button>
+          <button
+            className={`btn text-white bg-cyan-500 mr-5 ${
+              activeCategory === "Fruits" ? "active" : ""
+            }`}
+            onClick={() => filterProductsByCategory("Fruits")}
+          >
+            Fruits
+          </button>
+          <button
+            className={`btn bg-rose-500 text-white  mr-5 ${
+              activeCategory === "meat" ? "active" : ""
+            }`}
+            onClick={() => filterProductsByCategory("meat")}
+          >
+            Meat
+          </button>
         </div>
       </div>
       {loading ? (
@@ -65,7 +147,7 @@ const AllProducts = () => {
           {filteredProducts.map((product, index) => (
             <div
               key={index}
-              className="card hover:shadow-2xl h-96 w-80 bg-transparent shadow-xl glass"
+              className="card hover:shadow-2xl h-96 w-80 bg-transparent  glass"
               style={{
                 backdropFilter: "blur(1spx)",
                 backgroundColor: "rgba(255, 255, 255, 0.2)",
@@ -78,14 +160,19 @@ const AllProducts = () => {
                 <h2 className="card-title">{product.name}</h2>
                 <p className="font-semibold"> ${product.price}/ kg</p>
                 <div className="card-actions justify-end">
-                  <button className=" btn-primary font-bold bg-orange-600 text-2xl p-3 rounded-lg text-white"> <FaCartPlus /></button>
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    className=" btn-primary font-bold bg-orange-600 text-2xl p-3 rounded-lg text-white"
+                  >
+                    {" "}
+                    <FaCartPlus />
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       )}
-     
     </div>
   );
 };

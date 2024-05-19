@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { BiRightArrow } from "react-icons/bi";
+import {  FaCartShopping } from "react-icons/fa6";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -32,7 +33,7 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 "
             >
               <li>
                 <Link to="/">Home</Link>
@@ -50,6 +51,11 @@ const Navbar = () => {
               </li>
               <li>
                 <Link to="/contact">Contact</Link>
+              </li>
+              <li className="text-black">
+                <h1>
+                  Cart<FaCartShopping></FaCartShopping>
+                </h1>
               </li>
               <li>
                 {user ? (
@@ -97,16 +103,17 @@ const Navbar = () => {
             <li>
               <Link to="/contact">Contact</Link>
             </li>
+            <li className="text-black">
+              <h1>
+                Cart<FaCartShopping></FaCartShopping>
+              </h1>
+            </li>
             <li>
               {user ? (
                 <>
-                  {" "}
-                  <button
-                    onClick={handleLogOut}
-                    className="btn btn-outline btn-warning"
-                  >
-                    Logout
-                  </button>{" "}
+                  
+                    <li onClick={handleLogOut}>Logout</li>
+                  
                 </>
               ) : (
                 <>
@@ -117,9 +124,6 @@ const Navbar = () => {
               )}
             </li>
           </ul>
-        </div>
-        <div className="navbar-end">
-          <a className="btn">Button</a>
         </div>
       </div>
     </div>

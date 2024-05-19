@@ -21,7 +21,7 @@ const BestSellerProducts = () => {
   }, []);
 
   return (
-    <div>
+    <div className="my-10">
       <h1 className="text-5xl mt-8 font-bold text-gray-600 text-center">
         Our Bestseller Products
       </h1>
@@ -30,20 +30,21 @@ const BestSellerProducts = () => {
         juicy fruits and premium meats, our top sellers promise quality and
         taste in every bite.
       </p>
-      <div className="max-w-screen-lg mx-auto border">
+      <div className="max-w-screen-lg mx-auto">
         {loading ? (
           <p>Loading...</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {bestSellerProducts.map((product, index) => (
-              <div key={index} className="card h-80 bg-base-100 shadow-2xl">
+              <div key={index} className="card bg-slate-100 h-80  hover:shadow-2xl">
                 <figure className="px-10 pt-10">
                   <img
                     src={product.img}
                     alt={product.name}
-                    className="rounded-xl h-44"
+                    className="rounded-xl mt-10 h-48"
                   />
                 </figure>
+                
                 <div className="flex gap-x-4 text-xl  mx-auto ">
                   <FaStar className="checked text-green-600" />
                   <FaStar className="checked text-green-600" />
