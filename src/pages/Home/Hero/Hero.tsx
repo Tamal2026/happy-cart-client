@@ -3,7 +3,7 @@ import img from "../../../../public/assets/hero-img.jpg";
 const Hero = () => {
   return (
     <div
-      className="flex justify-center bg-cover bg-center my-4"
+      className="flex justify-center bg-cover my-7 bg-center "
       style={{
         backgroundImage: `url(${img})`,
         height: "500px",

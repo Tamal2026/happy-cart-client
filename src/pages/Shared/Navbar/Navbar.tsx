@@ -1,17 +1,24 @@
-import { useContext } from "react";
 
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { BiRightArrow } from "react-icons/bi";
-import {  FaCartShopping } from "react-icons/fa6";
+import { FaCartShopping } from "react-icons/fa6";
 import useCart from "../../../hooks/useCart";
 
+import { FaLongArrowAltRight } from "react-icons/fa";
+
 const Navbar = () => {
-  const [cart] = useCart()
+  const [cart] = useCart();
   const { user, logOut } = useContext(AuthContext);
+
+
   const handleLogOut = () => {
     logOut(user).then(() => {});
   };
+
+
+
   return (
     <div className="max-w-screen-2xl mx-auto">
       <div className="navbar bg-base-100">
@@ -107,15 +114,27 @@ const Navbar = () => {
             </li>
             <li>
               <h1 className="bg-amber-500 hover:bg-black text-white">
-                <FaCartShopping className="text-sm "></FaCartShopping>+{cart.length}
+                <FaCartShopping className="text-sm "></FaCartShopping>+
+                {cart.length}
               </h1>
             </li>
+            <li></li>
             <li>
               {user ? (
                 <>
-                  
-                    <li onClick={handleLogOut}>Logout</li>
-                  
+                  <details>
+                    <summary>Dashboard</summary>
+                    <ul className="p-2">
+                      <li>
+                        <Link to="/dashboard"><button>Dashboard</button></Link> 
+                      </li>
+                      <li>
+                        <button onClick={handleLogOut}>
+                          Logout<FaLongArrowAltRight></FaLongArrowAltRight>
+                        </button>
+                      </li>
+                    </ul>
+                  </details>
                 </>
               ) : (
                 <>
@@ -128,6 +147,7 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
+     
     </div>
   );
 };
