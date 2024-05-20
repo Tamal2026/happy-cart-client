@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useCart from "../../../hooks/useCart";
 
 interface Product {
   name: string;
@@ -17,6 +18,7 @@ interface Product {
 }
 
 const AllProducts = () => {
+  const[, refetch] = useCart()
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,6 +46,7 @@ const AllProducts = () => {
             showConfirmButton: false,
             timer: 1500,
           });
+          refetch()
         }
       });
       // toDo : send cart item to the database

@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { BiRightArrow } from "react-icons/bi";
 import {  FaCartShopping } from "react-icons/fa6";
+import useCart from "../../../hooks/useCart";
 
 const Navbar = () => {
+  const [cart] = useCart()
   const { user, logOut } = useContext(AuthContext);
   const handleLogOut = () => {
     logOut(user).then(() => {});
@@ -103,9 +105,9 @@ const Navbar = () => {
             <li>
               <Link to="/contact">Contact</Link>
             </li>
-            <li className="text-black">
-              <h1>
-                Cart<FaCartShopping></FaCartShopping>
+            <li>
+              <h1 className="bg-amber-500 hover:bg-black text-white">
+                <FaCartShopping className="text-sm "></FaCartShopping>+{cart.length}
               </h1>
             </li>
             <li>
