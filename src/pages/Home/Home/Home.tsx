@@ -4,6 +4,7 @@ import FreshFruitBanner from "../../FreshFruitBanner/FreshFruitBanner";
 import AllProducts from "../AllProducts/AllProducts";
 import CustomerSatisfiedSection from "../CustomerSatisfiedSection/CustomerSatisfiedSection";
 import Hero from "../Hero/Hero";
+import Testimonial from "./Testimonial/Testimonial";
 
 const Home = () => {
   return (
@@ -14,6 +15,7 @@ const Home = () => {
       <FreshFruitBanner></FreshFruitBanner>
       <BestSellerProducts></BestSellerProducts>
       <CustomerSatisfiedSection></CustomerSatisfiedSection>
+      <Testimonial></Testimonial>
       <Features></Features>
     </>
   );
