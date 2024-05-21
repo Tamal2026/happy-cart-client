@@ -39,13 +39,13 @@ const Testimonial = () => {
     speed: 500,
     autoplay: true,
     autoplaySpeed: 3000,
-    slidesToShow: 2, // Display two reviews at a time
+    slidesToShow: 2, 
     slidesToScroll: 1,
     responsive: [
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 1, // Display one review at a time on smaller screens
+          slidesToShow: 1, 
           slidesToScroll: 1,
         },
       },
@@ -62,7 +62,7 @@ const Testimonial = () => {
         <Slider {...settings}>
           {testimonials.map((testimonial, index) => (
             <div key={index} className="bg-white shadow-md rounded-lg p-6 mx-2">
-              <div className="flex items-center mb-4">
+              <div className="flex gap items-center mb-4">
                 {[...Array(5)].map((_, i) => (
                   <FaStar
                     key={i}

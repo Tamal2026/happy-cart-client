@@ -1,96 +1,133 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useCart from "../../hooks/useCart";
+import { FaTrashAlt } from "react-icons/fa";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Cart = () => {
-  const [cart] = useCart();
-  const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+  const axiosSecure = useAxiosSecure();
+  const [cart , refetch] = useCart();
+  const [quantities, setQuantities] = useState([]);
+
+  // Initialize quantities state when the cart changes
+  useEffect(() => {
+    setQuantities(cart.map(() => 1));
+  }, [cart]);
+
+  const totalPrice = cart.reduce(
+    (total, item, index) => total + item.price * quantities[index],
+    0
+  );
+
+  const handleIncrease = (index) => {
+    setQuantities((prev) => {
+      const newQuantities = [...prev];
+      newQuantities[index] += 1;
+      return newQuantities;
+    });
+  };
+
+  const handleDecrease = (index) => {
+    setQuantities((prev) => {
+      const newQuantities = [...prev];
+      if (newQuantities[index] > 0) {
+        newQuantities[index] -= 1;
+      }
+      return newQuantities;
+    });
+  };
+
+  const handleDelete = (id :number) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/cart/${id}`).then((res) => {
+          if (res.data.deletedCount > 0) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
+            refetch()
+          }
+        });
+      }
+    });
+  };
+
   return (
     <div className="max-w-screen-xl mx-auto">
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <div className="px-4 py-3 flex justify-between  border-b border-gray-200">
+        <div className="px-4 py-3 flex justify-between border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800">Your Cart</h2>
           <h2 className="text-xl font-semibold text-gray-800">
-            Total item : {cart.length}
+            Total items: {cart.length}
           </h2>
         </div>
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <img
-                src={cart.img}
-                alt="Product"
-                className="w-16 h-16 object-cover rounded-lg mr-4"
-              />
-              <div>
-                <h3 className="font-semibold text-gray-800">Product Name</h3>
+        <div className="px-4 py-3">
+          {cart.map((item, index) => (
+            <div
+              key={item._id}
+              className="flex items-center justify-between py-3 border-b border-gray-200"
+            >
+              <div className="flex items-center gap-3">
+                <div className="font-bold text-lg">{index + 1}.</div>
+                <div className="avatar">
+                  <div className="mask mask-squircle w-12 h-12">
+                    <img src={item.img} alt={item.name} />
+                  </div>
+                </div>
+                <div>
+                  <div className="font-bold">{item.name}</div>
+                  <div className="text-sm opacity-50">{item.description}</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  className="btn btn-ghost btn-xs"
+                  onClick={() => handleDecrease(index)}
+                >
+                  -
+                </button>
+                <div className="text-lg font-semibold">{quantities[index]}</div>
+                <button
+                  className="btn btn-ghost btn-xs"
+                  onClick={() => handleIncrease(index)}
+                >
+                  +
+                </button>
+              </div>
+              <div className="text-right">
+                <div className="font-bold text-lg">
+                  ${(item.price * quantities[index]).toFixed(2)}
+                </div>
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="btn btn-ghost btn-xs"
+                >
+                  Remove <FaTrashAlt className="text-red-600"></FaTrashAlt>
+                </button>
               </div>
             </div>
-            <div className="flex items-center">
-              <button className="text-gray-500 hover:text-gray-700">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-              </button>
-              <span className="mx-2">1</span>
-              <button className="text-gray-500 hover:text-gray-700">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 12H4"
-                  />
-                </svg>
-              </button>
-              <button className="text-red-500 hover:text-red-700 ml-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          {/* Cart total */}
-          <div className="flex justify-between">
-            <p className="text-lg font-semibold text-gray-800">Total:</p>
-            <p className="text-lg font-semibold text-gray-800">
-              ${totalPrice.toFixed(2)}
-            </p>
-          </div>
-          {/* Checkout button */}
+          ))}
+        </div>
+        <div className="px-4 py-3 border-t border-gray-200 flex justify-between">
           <Link to="/checkout">
-            
-            <button className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+            <button className="btn bg-red-600 text-white text-xl">
               Checkout
             </button>
           </Link>
+          <div className="text-lg font-semibold">
+            Total Price: ${totalPrice.toFixed(2)}
+          </div>
         </div>
       </div>
     </div>

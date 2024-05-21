@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 
 type Inputs = {
   name: string;
@@ -10,6 +12,7 @@ type Inputs = {
 };
 
 const SignUp = () => {
+  const axiosPublic = useAxiosPublic()
   const navigate = useNavigate()
   const { createUser, updateUserProfile } = useContext(AuthContext);
 
@@ -26,7 +29,28 @@ const SignUp = () => {
       console.log(loggedUser);
       updateUserProfile(data.name)
         .then(() => {
-          console.log("User profile info updated");
+          const userInfo = {
+            name: data.name,
+            email:data.email
+          }
+
+axiosPublic.post('/users',userInfo)
+.then(res =>{
+  if(res.data.insertedId){
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Your work has been saved",
+      showConfirmButton: false,
+      timer: 1500
+    });
+
+    navigate('/')
+    reset()
+  }
+})
+
+         
           reset();
           navigate('/')
         })

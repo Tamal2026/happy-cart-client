@@ -12,7 +12,7 @@ const FreshFruitBanner = () => {
                 <div className="flex items-center justify-center bg-white rounded-full absolute w-[140px] h-[140px] top-0 left-0">
                     <h1 className="font-semibold text-5xl">$1</h1> {/* Larger font size for $1 */}
                     <div className="flex flex-col ml-2">
-                        <span className="text-lg font-serif font-medium">50¢</span> {/* Smaller font size for 50¢ */}
+                        <span className="text-lg font-serif font-medium">99¢</span> {/* Smaller font size for 50¢ */}
                         <span className="text-xs font-serif font-semibold">kg</span> {/* Smallest font size for kg */}
                     </div>
                 </div>
