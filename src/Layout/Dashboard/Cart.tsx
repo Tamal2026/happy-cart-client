@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import useCart from "../../hooks/useCart";
 
 const Cart = () => {
@@ -13,7 +14,6 @@ const Cart = () => {
           </h2>
         </div>
         <div className="p-4">
-        
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <img
@@ -23,7 +23,6 @@ const Cart = () => {
               />
               <div>
                 <h3 className="font-semibold text-gray-800">Product Name</h3>
-             
               </div>
             </div>
             <div className="flex items-center">
@@ -81,12 +80,17 @@ const Cart = () => {
           {/* Cart total */}
           <div className="flex justify-between">
             <p className="text-lg font-semibold text-gray-800">Total:</p>
-            <p className="text-lg font-semibold text-gray-800">${totalPrice}</p>
+            <p className="text-lg font-semibold text-gray-800">
+              ${totalPrice.toFixed(2)}
+            </p>
           </div>
           {/* Checkout button */}
-          <button className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-            Checkout
-          </button>
+          <Link to="/checkout">
+            
+            <button className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+              Checkout
+            </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -112,12 +112,12 @@ const Navbar = () => {
             <li>
               <Link to="/contact">Contact</Link>
             </li>
-            <li>
+            <Link to="/cart"><li>
               <h1 className="bg-amber-500 hover:bg-black text-white">
                 <FaCartShopping className="text-sm "></FaCartShopping>+
                 {cart.length}
               </h1>
-            </li>
+            </li></Link>
             <li></li>
             <li>
               {user ? (

@@ -7,6 +7,8 @@ import SignUp from "../pages/SignUp/SignUp";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import Dashboard from "../Layout/Dashboard/Dashboard";
 import PurchasedHistory from "../Layout/Dashboard/PurchasedHistory";
+import Cart from "../Layout/Dashboard/Cart";
+import Checkout from "../pages/Checkout/Checkout";
 
 export const router = createBrowserRouter([
   {
@@ -33,17 +35,25 @@ export const router = createBrowserRouter([
         path: "/signUp",
         element: <SignUp></SignUp>,
       },
+      {
+        path: "/cart",
+        element: <Cart></Cart>,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout></Checkout>,
+      },
     ],
   },
   {
     path: "/dashboard",
     element: <Dashboard></Dashboard>,
-    children:[
+    children: [
       {
-        path:'/dashboard/purchasedHistory',
+        path: "/dashboard/purchasedHistory",
 
-      element:<PurchasedHistory></PurchasedHistory>
-      }
-    ]
+        element: <PurchasedHistory></PurchasedHistory>,
+      },
+    ],
   },
 ]);
