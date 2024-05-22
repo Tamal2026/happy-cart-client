@@ -1,10 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import "../../../index.css";
 import { FaCartPlus } from "react-icons/fa";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import Modal from "react-modal";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
 
@@ -17,8 +16,55 @@ interface Product {
   email: string;
 }
 
+const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
+  const [quantity, setQuantity] = useState(1);
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      contentLabel="Product Details"
+      className="fixed inset-0 flex items-center justify-center z-50"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
+    >
+      <div className="bg-white rounded-lg shadow-lg w-96 p-6">
+        <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
+        <img className="h-60 w-full mb-4 object-cover" src={product.img} alt="" />
+        <p className="mb-2">Price: ${product.price} / kg</p>
+        <p className="mb-4">Category: {product.category}</p>
+        <div className="mb-4">
+          <label className="block mb-1 font-semibold">
+            Quantity:
+            <input
+              type="number"
+              min="1"
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+              className="ml-2 border rounded px-2 py-1 w-full"
+            />
+          </label>
+        </div>
+        <div className="flex justify-between">
+          <button
+            onClick={() => handleAddToCart(product, quantity)}
+            className="btn  text-white font-bold py-2 px-4 rounded bg-blue-500"
+          >
+            Add to Cart
+          </button>
+          <button
+            onClick={onRequestClose}
+            className="btn text-white font-bold py-2 px-4 rounded bg-red-500"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
 const AllProducts = () => {
-  const[, refetch] = useCart()
+  const [, refetch] = useCart();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,8 +73,20 @@ const AllProducts = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const handleAddToCart = (product: Product) => {
+  const handleOpenModal = (product: Product) => {
+    setSelectedProduct(product);
+    setModalIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedProduct(null);
+    setModalIsOpen(false);
+  };
+
+  const handleAddToCart = (product: Product, quantity: number) => {
     if (user && user.email) {
       const cartItem = {
         itemId: product._id,
@@ -36,20 +94,21 @@ const AllProducts = () => {
         name: product.name,
         img: product.img,
         price: product.price,
+        quantity: quantity,
       };
       axiosSecure.post("/cart", cartItem).then((res) => {
         if (res.data.insertedId) {
           Swal.fire({
             position: "center",
             icon: "success",
-            title: "Your work has been saved",
+            title: "Your product has been added to the cart",
             showConfirmButton: false,
             timer: 1500,
           });
-          refetch()
+          refetch();
+          handleCloseModal();
         }
       });
-      // toDo : send cart item to the database
     } else {
       Swal.fire({
         title: "You are not Logged In",
@@ -77,63 +136,49 @@ const AllProducts = () => {
   }, []);
 
   const filterProductsByCategory = (category: string) => {
-    setActiveCategory(category); // Set the active category
+    setActiveCategory(category);
     if (category === "all") {
       const filtered = allProducts.reduce((acc: Product[], curr: Product) => {
         const index = acc.findIndex((item) => item.category === curr.category);
         if (index === -1) {
           acc.push(curr);
-        } else if (
-          acc.filter((item) => item.category === curr.category).length < 4
-        ) {
+        } else if (acc.filter((item) => item.category === curr.category).length < 4) {
           acc.push(curr);
         }
         return acc;
       }, []);
       setFilteredProducts(filtered);
     } else {
-      const filtered = allProducts.filter(
-        (product) => product.category === category
-      );
+      const filtered = allProducts.filter((product) => product.category === category);
       setFilteredProducts(filtered);
     }
   };
 
   return (
-    <div className=" w-[1400px] gap-4 mx-auto">
+    <div className="w-[1400px] gap-4 mx-auto">
       <div className="flex items-center justify-evenly mr-12 ">
-        <h1 className="text-3xl my-8 font-medium justify-start">
-          Shop Our Products
-        </h1>
+        <h1 className="text-3xl my-8 font-medium justify-start">Shop Our Products</h1>
         <div>
           <button
-            className={`btn bg-amber-500 text-white  mr-5 ${
-              activeCategory === "all" ? "active" : ""
-            }`}
+            className={`btn bg-amber-500 text-white mr-5 ${activeCategory === "all" ? "active" : ""}`}
             onClick={() => filterProductsByCategory("all")}
           >
             All Products
           </button>
           <button
-            className={`btn bg-emerald-500 text-white  mr-5 ${
-              activeCategory === "Vegetable" ? "active" : ""
-            }`}
+            className={`btn bg-emerald-500 text-white mr-5 ${activeCategory === "Vegetable" ? "active" : ""}`}
             onClick={() => filterProductsByCategory("Vegetable")}
           >
             Vegetables
           </button>
           <button
-            className={`btn text-white bg-cyan-500 mr-5 ${
-              activeCategory === "Fruits" ? "active" : ""
-            }`}
+            className={`btn text-white bg-cyan-500 mr-5 ${activeCategory === "Fruits" ? "active" : ""}`}
             onClick={() => filterProductsByCategory("Fruits")}
           >
             Fruits
           </button>
           <button
-            className={`btn bg-rose-500 text-white  mr-5 ${
-              activeCategory === "meat" ? "active" : ""
-            }`}
+            className={`btn bg-rose-500 text-white mr-5 ${activeCategory === "meat" ? "active" : ""}`}
             onClick={() => filterProductsByCategory("meat")}
           >
             Meat
@@ -150,9 +195,9 @@ const AllProducts = () => {
           {filteredProducts.map((product, index) => (
             <div
               key={index}
-              className="card hover:shadow-2xl h-96 w-80 bg-transparent  glass"
+              className="card hover:shadow-2xl h-96 w-80 bg-transparent glass"
               style={{
-                backdropFilter: "blur(1spx)",
+                backdropFilter: "blur(1px)",
                 backgroundColor: "rgba(255, 255, 255, 0.2)",
               }}
             >
@@ -164,10 +209,9 @@ const AllProducts = () => {
                 <p className="font-semibold"> ${product.price}/ kg</p>
                 <div className="card-actions justify-end">
                   <button
-                    onClick={() => handleAddToCart(product)}
-                    className=" btn-primary font-bold bg-orange-600 text-2xl p-3 rounded-lg text-white"
+                    onClick={() => handleOpenModal(product)}
+                    className="btn-primary font-bold bg-orange-600 text-2xl p-3 rounded-lg text-white"
                   >
-                    {" "}
                     <FaCartPlus />
                   </button>
                 </div>
@@ -175,6 +219,14 @@ const AllProducts = () => {
             </div>
           ))}
         </div>
+      )}
+      {selectedProduct && (
+        <ProductModal
+          product={selectedProduct}
+          isOpen={modalIsOpen}
+          onRequestClose={handleCloseModal}
+          handleAddToCart={handleAddToCart}
+        />
       )}
     </div>
   );

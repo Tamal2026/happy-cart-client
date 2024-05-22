@@ -9,6 +9,7 @@ import Dashboard from "../Layout/Dashboard/Dashboard";
 import PurchasedHistory from "../Layout/Dashboard/PurchasedHistory";
 import Cart from "../Layout/Dashboard/Cart";
 import Checkout from "../pages/Checkout/Checkout";
+import AllUser from "../Layout/Dashboard/AllUser";
 
 export const router = createBrowserRouter([
   {
@@ -50,9 +51,13 @@ export const router = createBrowserRouter([
     element: <Dashboard></Dashboard>,
     children: [
       {
-        path: "/dashboard/purchasedHistory",
+        path: "purchasedHistory",
 
         element: <PurchasedHistory></PurchasedHistory>,
+      },
+      {
+        path: "allusers",
+        element: <AllUser></AllUser>,
       },
     ],
   },

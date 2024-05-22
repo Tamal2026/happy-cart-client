@@ -1,16 +1,89 @@
 import React from "react";
-import PersistentDrawerLeft from "./PersistentDrawerLeft";
-import Cart from "./Cart";
+import { FaHome } from "react-icons/fa";
+import { Link, NavLink, Outlet } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
+  const isAdmin = true;
   return (
-    <>
-      <PersistentDrawerLeft />
+    <div className="flex min-h-screen bg-gray-100">
+      <aside className="w-64 bg-blue-900 text-white">
+        <div className="p-6">
+          <h2 className="text-3xl font-bold">Dashboard</h2>
+        </div>
+        {isAdmin ? (
+          <ul className="mt-6">
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/dashboard/overview">Overview</Link>
+            </li>
+            <NavLink to="/dashboard/allusers">
+              <li className="px-6 py-2 hover:bg-blue-700">
+                <h1>All Users</h1>
+              </li>
+            </NavLink>
 
-      <div className="max-w-screen-xl mx-auto ">
-        <Cart></Cart>
-      </div>
-    </>
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/dashboard/settings">Settings</Link>
+            </li>
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/dashboard/notifications">Notifications</Link>
+            </li>
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/checkout">Messages</Link>
+            </li>
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/dashboard/support">Support</Link>
+            </li>
+            <hr className="my-4 border-gray-600" />
+          </ul>
+        ) : (
+          <ul className="mt-6">
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/dashboard/overview">Overview</Link>
+            </li>
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/dashboard/allusers">All Users</Link>
+            </li>
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/dashboard/settings">Settings</Link>
+            </li>
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/dashboard/notifications">Notifications</Link>
+            </li>
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/checkout">Messages</Link>
+            </li>
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <Link to="/dashboard/support">Support</Link>
+            </li>
+            <hr className="my-4 border-gray-600" />
+          </ul>
+        )}
+
+        {/* Shared Links */}
+        <ul>
+          <Link to="/">
+            <li className="px-6 py-2 hover:bg-blue-700">
+              <h1>Back to Home</h1>
+            </li>
+          </Link>
+
+          <li className="px-6 py-2 hover:bg-blue-700">
+            <Link to="/dashboard/analytics">Analytics</Link>
+          </li>
+          <li className="px-6 py-2 hover:bg-blue-700">
+            <Link to="/dashboard/integrations">Integrations</Link>
+          </li>
+        </ul>
+      </aside>
+
+      <main className="flex-1 p-6">
+        <h1 className="text-2xl font-bold">Welcome to your Dashboard</h1>
+        <p className="mt-4">
+          Select an option from the sidebar to get started.
+        </p>
+        <Outlet />
+      </main>
+    </div>
   );
 };
 

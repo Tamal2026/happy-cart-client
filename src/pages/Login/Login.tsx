@@ -1,18 +1,16 @@
 import { useContext } from "react";
-
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
 const Login = () => {
-  // const [disable, setDiable] = useState(true);
   const { signIn } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.pathname || "/";
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleLogin = (e: any) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
@@ -66,19 +64,21 @@ const Login = () => {
                 </a>
               </label>
             </div>
-
             <div className="form-control mt-6">
               <input type="submit" className="btn btn-primary" value="Login" />
             </div>
-            <div>
-              <h1>
-                New here ? Go to{" "}
-                <Link className="text-green-500" to="/signUp">
-                  Sign-up
-                </Link>
-              </h1>
-            </div>
           </form>
+          <div className="mt-4">
+            <h1>
+              New here? Go to{" "}
+              <Link className="text-green-500" to="/signUp">
+                Sign-up
+              </Link>
+            </h1>
+            <div className="mt-2">
+              <SocialLogin />
+            </div>
+          </div>
         </div>
       </div>
     </div>
