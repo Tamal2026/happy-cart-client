@@ -101,7 +101,7 @@ const AllUser = () => {
                 <td>
                   <button
                     className="btn bg-red-500 text-white"
-                    disabled onClick={() => handleDelete(user)}
+                    disabled={user.role === 'admin'} onClick={() => handleDelete(user)}
                   >
                     
                     <MdDeleteForever className="text-2xl text-white"></MdDeleteForever>
