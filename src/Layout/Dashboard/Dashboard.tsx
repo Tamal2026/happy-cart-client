@@ -1,9 +1,10 @@
 import React from "react";
-import { FaHome } from "react-icons/fa";
+
 import { Link, NavLink, Outlet } from "react-router-dom";
+import useAdmin from "../../hooks/useAdmin";
 
 const Dashboard: React.FC = () => {
-  const isAdmin = true;
+  const [isAdmin] = useAdmin()
   return (
     <div className="flex min-h-screen bg-gray-100">
       <aside className="w-64 bg-blue-900 text-white">
