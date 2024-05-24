@@ -16,15 +16,18 @@ const Dashboard: React.FC = () => {
             <li className="px-6 py-2 hover:bg-blue-700">
               <Link to="/dashboard/overview">Overview</Link>
             </li>
+            <NavLink to="/dashboard/addProduct">
+              <li className="px-6 py-2 hover:bg-blue-700">
+                <h1>Add Product</h1>
+              </li>
+            </NavLink>
             <NavLink to="/dashboard/allusers">
               <li className="px-6 py-2 hover:bg-blue-700">
                 <h1>All Users</h1>
               </li>
             </NavLink>
 
-            <li className="px-6 py-2 hover:bg-blue-700">
-              <Link to="/dashboard/settings">Settings</Link>
-            </li>
+           
             <li className="px-6 py-2 hover:bg-blue-700">
               <Link to="/dashboard/notifications">Notifications</Link>
             </li>
@@ -42,7 +45,7 @@ const Dashboard: React.FC = () => {
               <Link to="/dashboard/overview">Overview</Link>
             </li>
             <li className="px-6 py-2 hover:bg-blue-700">
-              <Link to="/dashboard/allusers">All Users</Link>
+              <Link to="/dashboard/allusers">Alddl Users</Link>
             </li>
             <li className="px-6 py-2 hover:bg-blue-700">
               <Link to="/dashboard/settings">Settings</Link>
@@ -60,7 +63,7 @@ const Dashboard: React.FC = () => {
           </ul>
         )}
 
-        {/* Shared Links */}
+
         <ul>
           <Link to="/">
             <li className="px-6 py-2 hover:bg-blue-700">

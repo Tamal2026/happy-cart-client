@@ -1,3 +1,6 @@
+import { FaLocationDot } from "react-icons/fa6";
+import { MdOutgoingMail } from "react-icons/md";
+
 const Contact = () => {
   return (
     <section className="my-7">
@@ -16,7 +19,7 @@ const Contact = () => {
             distinctio dolorum recusandae cumque quia totam laborum dignissimos
             quod corrupti optio. Similique, minus voluptate?
           </h1>
-          <div className="flex justify-center gap-24">
+          <div className="flex justify-center">
             <form>
               <input
                 type="text"
@@ -48,13 +51,39 @@ const Contact = () => {
                 id=""
               />
             </form>
-            <div>
-              <div className="h-24 w-[400px] rounded-lg bg-white">Address</div>
-              <div className="h-24 w-[400px] my-4 rounded-lg bg-white">
-                Mail Us
+            <div className="mr-12">
+              <div className="h-24 flex items-center gap-3 w-[400px] mb-5 rounded-lg bg-white">
+                <div>
+                  <h1 className="text-4xl pl-4 text-green-500">
+                    <FaLocationDot />
+                  </h1>
+                </div>
+                <div>
+                  <h1 className="text-2xl">Address</h1>
+                  <h1 className="text-gray-400">123 Street New York.USA</h1>
+                </div>
               </div>
-              <div className="h-24 w-[400px] rounded-lg bg-white">
-                Telephone
+              <div className="h-24 flex items-center gap-3 w-[400px] mb-5 rounded-lg bg-white">
+                <div>
+                  <h1 className="text-4xl pl-4 text-green-500">
+                   <MdOutgoingMail></MdOutgoingMail>
+                  </h1>
+                </div>
+                <div>
+                  <h1 className="text-2xl">Mail us</h1>
+                  <h1 className="text-gray-400">happycart@gmail.com</h1>
+                </div>
+              </div>
+              <div className="h-24 flex items-center gap-3 w-[400px] mb-5 rounded-lg bg-white">
+                <div>
+                  <h1 className="text-4xl pl-4 text-green-500">
+                    <FaLocationDot />
+                  </h1>
+                </div>
+                <div>
+                  <h1 className="text-2xl">Telephone</h1>
+                  <h1 className="text-gray-400">(+012) 3456 7890</h1>
+                </div>
               </div>
             </div>
           </div>

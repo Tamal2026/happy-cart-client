@@ -10,6 +10,7 @@ import PurchasedHistory from "../Layout/Dashboard/PurchasedHistory";
 import Cart from "../Layout/Dashboard/Cart";
 import Checkout from "../pages/Checkout/Checkout";
 import AllUser from "../Layout/Dashboard/AllUser";
+import AddProduct from "../Layout/Dashboard/AddProduct";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,11 @@ export const router = createBrowserRouter([
         path: "purchasedHistory",
 
         element: <PurchasedHistory></PurchasedHistory>,
+      },
+      // Admin ROutes
+      {
+        path:'addProduct',
+        element:<AddProduct></AddProduct>
       },
       {
         path: "allusers",
