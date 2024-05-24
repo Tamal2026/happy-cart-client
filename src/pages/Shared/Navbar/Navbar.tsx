@@ -1,4 +1,3 @@
-
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
@@ -12,12 +11,9 @@ const Navbar = () => {
   const [cart] = useCart();
   const { user, logOut } = useContext(AuthContext);
 
-
   const handleLogOut = () => {
     logOut(user).then(() => {});
   };
-
-
 
   return (
     <div className="max-w-screen-2xl mx-auto">
@@ -85,11 +81,13 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <img
-            src="../../../../public/assets/logomain.png"
-            className="h-[150px] w-[190px]"
-            alt=""
-          />
+          <Link to="/">
+            <img
+              src="../../../../public/assets/logomain.png"
+              className="h-[150px] w-[190px]"
+              alt=""
+            />
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
@@ -112,12 +110,14 @@ const Navbar = () => {
             <li>
               <Link to="/contact">Contact</Link>
             </li>
-            <Link to="/cart"><li>
-              <h1 className="bg-amber-500 hover:bg-black text-white">
-                <FaCartShopping className="text-sm "></FaCartShopping>+
-                {cart.length}
-              </h1>
-            </li></Link>
+            <Link to="/cart">
+              <li>
+                <h1 className="bg-amber-500 hover:bg-black text-white">
+                  <FaCartShopping className="text-sm "></FaCartShopping>+
+                  {cart.length}
+                </h1>
+              </li>
+            </Link>
             <li></li>
             <li>
               {user ? (
@@ -126,7 +126,9 @@ const Navbar = () => {
                     <summary>Dashboard</summary>
                     <ul className="p-2">
                       <li>
-                        <Link to="/dashboard"><button>Dashboard</button></Link> 
+                        <Link to="/dashboard">
+                          <button>Dashboard</button>
+                        </Link>
                       </li>
                       <li>
                         <button onClick={handleLogOut}>
@@ -147,7 +149,6 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
-     
     </div>
   );
 };
