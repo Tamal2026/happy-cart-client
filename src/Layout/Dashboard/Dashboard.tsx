@@ -4,7 +4,7 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
 
 const Dashboard: React.FC = () => {
-  const [isAdmin] = useAdmin()
+  const [isAdmin] = useAdmin();
   return (
     <div className="flex min-h-screen bg-gray-100">
       <aside className="w-64 bg-blue-900 text-white">
@@ -16,6 +16,11 @@ const Dashboard: React.FC = () => {
             <li className="px-6 py-2 hover:bg-blue-700">
               <Link to="/dashboard/overview">Overview</Link>
             </li>
+            <NavLink to="/dashboard/manageProducts">
+              <li className="px-6 py-2 hover:bg-blue-700">
+                <h1>Mange Products</h1>
+              </li>
+            </NavLink>
             <NavLink to="/dashboard/addProduct">
               <li className="px-6 py-2 hover:bg-blue-700">
                 <h1>Add Product</h1>
@@ -27,10 +32,6 @@ const Dashboard: React.FC = () => {
               </li>
             </NavLink>
 
-           
-            <li className="px-6 py-2 hover:bg-blue-700">
-              <Link to="/dashboard/notifications">Notifications</Link>
-            </li>
             <li className="px-6 py-2 hover:bg-blue-700">
               <Link to="/checkout">Messages</Link>
             </li>
@@ -62,7 +63,6 @@ const Dashboard: React.FC = () => {
             <hr className="my-4 border-gray-600" />
           </ul>
         )}
-
 
         <ul>
           <Link to="/">

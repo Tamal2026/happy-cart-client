@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -26,15 +27,18 @@ const AddProduct = () => {
         short_desc: data.short_desc,
         img: res.data.data.display_url,
       };
-      const ProductRes = await axiosSecure.post("/all-products", productData);
+      const ProductRes = await axiosPublic.post("/all-products", productData);
       console.log(ProductRes.data);
-      if(ProductRes.data.insertedId){
-        alert('Success')
+      if (ProductRes.data.insertedId) {
+        Swal.fire({
+          icon: "success",
+          title: `${productData.name} has been saved`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     }
 
-
-  
     reset();
   };
 
@@ -63,9 +67,9 @@ const AddProduct = () => {
             <option disabled value="">
               Select a category
             </option>
-            <option value="vegetable">Vegetable</option>
+            <option value="Vegetable">Vegetable</option>
             <option value="meat">Meat</option>
-            <option value="fruits">Fruits</option>
+            <option value="Fruits">Fruits</option>
           </select>
         </div>
         <div className="mb-4">
