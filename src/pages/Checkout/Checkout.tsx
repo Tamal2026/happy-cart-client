@@ -1,15 +1,25 @@
-import React from 'react';
+import { Link } from "react-router-dom";
+import { loadStripe } from "@stripe/react-stripe-js";
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+};
+// todo : Add Pk Key
 
 const Checkout = () => {
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Checkout</h2>
-      <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Billing Details */}
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
         <div className="md:col-span-2 lg:col-span-1">
           <h3 className="text-xl font-semibold mb-2">Billing Details</h3>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="name">Name</label>
+            <label className="block text-gray-700 mb-2" htmlFor="name">
+              Name
+            </label>
             <input
               type="text"
               id="name"
@@ -18,7 +28,9 @@ const Checkout = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="email">Email</label>
+            <label className="block text-gray-700 mb-2" htmlFor="email">
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -27,7 +39,9 @@ const Checkout = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="address">Address</label>
+            <label className="block text-gray-700 mb-2" htmlFor="address">
+              Address
+            </label>
             <input
               type="text"
               id="address"
@@ -36,7 +50,9 @@ const Checkout = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="city">City</label>
+            <label className="block text-gray-700 mb-2" htmlFor="city">
+              City
+            </label>
             <input
               type="text"
               id="city"
@@ -46,7 +62,9 @@ const Checkout = () => {
           </div>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-gray-700 mb-2" htmlFor="state">State</label>
+              <label className="block text-gray-700 mb-2" htmlFor="state">
+                State
+              </label>
               <input
                 type="text"
                 id="state"
@@ -55,7 +73,9 @@ const Checkout = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 mb-2" htmlFor="zip">Zip Code</label>
+              <label className="block text-gray-700 mb-2" htmlFor="zip">
+                Zip Code
+              </label>
               <input
                 type="text"
                 id="zip"
@@ -66,11 +86,12 @@ const Checkout = () => {
           </div>
         </div>
 
-        {/* Payment Details */}
         <div className="md:col-span-2 lg:col-span-1">
           <h3 className="text-xl font-semibold mb-2">Payment Details</h3>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="cardName">Name on Card</label>
+            <label className="block text-gray-700 mb-2" htmlFor="cardName">
+              Name on Card
+            </label>
             <input
               type="text"
               id="cardName"
@@ -79,7 +100,9 @@ const Checkout = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="cardNumber">Card Number</label>
+            <label className="block text-gray-700 mb-2" htmlFor="cardNumber">
+              Card Number
+            </label>
             <input
               type="text"
               id="cardNumber"
@@ -89,7 +112,9 @@ const Checkout = () => {
           </div>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-gray-700 mb-2" htmlFor="expiry">Expiry Date</label>
+              <label className="block text-gray-700 mb-2" htmlFor="expiry">
+                Expiry Date
+              </label>
               <input
                 type="text"
                 id="expiry"
@@ -98,7 +123,9 @@ const Checkout = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 mb-2" htmlFor="cvc">CVC</label>
+              <label className="block text-gray-700 mb-2" htmlFor="cvc">
+                CVC
+              </label>
               <input
                 type="text"
                 id="cvc"
@@ -110,9 +137,11 @@ const Checkout = () => {
         </div>
       </form>
       <div className="mt-4">
-        <button className="w-full md:w-auto bg-blue-500 text-white py-2 px-4 rounded">
-          Place Order
-        </button>
+        <Link to="/dashboard/payment">
+          <button className="w-full md:w-auto bg-blue-500 text-white py-2 px-4 rounded">
+            Place Order
+          </button>
+        </Link>
       </div>
     </div>
   );

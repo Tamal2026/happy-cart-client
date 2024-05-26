@@ -1,16 +1,19 @@
 import { useForm } from "react-hook-form";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { useLoaderData } from "react-router-dom";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
-const AddProduct = () => {
+const UpdatedProduct = () => {
   const axiosSecure = useAxiosSecure();
-
   const axiosPublic = useAxiosPublic();
-  const { register, handleSubmit, reset } = useForm();
+
+  const { name, category, price, short_desc, img, _id } = useLoaderData();
+
+  const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
     const imageFile = { image: data.image[0] };
@@ -27,22 +30,26 @@ const AddProduct = () => {
         short_desc: data.short_desc,
         img: res.data.data.display_url,
       };
-      const ProductRes = await axiosSecure.post("/all-products", productData);
+      console.log(productData);
+      const ProductRes = await axiosSecure.patch(
+        `/all-products/${_id}`,
+        productData
+      );
 
       Swal.fire({
         title: "Are you sure?",
-        text: `${productData.name} item will be add`,
+        text: `${productData.name} data will be update`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, add this!",
+        confirmButtonText: "Yes, update it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          if (ProductRes.data.insertedId) {
+          if (ProductRes.data.modifiedCount > 0) {
             Swal.fire({
               icon: "success",
-              title: `${productData.name} has been saved`,
+              title: `${productData.name} Updated Successfully`,
               showConfirmButton: false,
               timer: 1500,
             });
@@ -50,21 +57,18 @@ const AddProduct = () => {
         }
       });
     }
-
-    reset();
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-4">Add Product</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Name:
-          </label>
+    <div className="max-w-lg mx-auto mt-8">
+      <h2 className="text-2xl font-bold mb-4">Update Product</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <label className="block">Name:</label>
           <input
             type="text"
-            {...register("name", { required: true })}
+            defaultValue={name}
+            {...register("name")}
             className="w-full border border-gray-300 rounded px-3 py-2"
           />
         </div>
@@ -73,56 +77,60 @@ const AddProduct = () => {
             Category:
           </label>
           <select
-            {...register("category", { required: true })}
+            {...register("category")}
+            defaultValue={category}
             className="w-full border border-gray-300 rounded px-3 py-2"
           >
-            <option disabled value="">
-              Select a category
-            </option>
             <option value="Vegetable">Vegetable</option>
             <option value="meat">Meat</option>
             <option value="Fruits">Fruits</option>
           </select>
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Price:
-          </label>
+        <div>
+          <label className="block">Price:</label>
           <input
             type="number"
-            {...register("price", { required: true })}
+            defaultValue={price}
+            {...register("price")}
             className="w-full border border-gray-300 rounded px-3 py-2"
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Short Description:
-          </label>
+        <div>
+          <label className="block">Short Description:</label>
           <textarea
-            {...register("short_desc", { required: true })}
+            defaultValue={short_desc}
+            {...register("short_desc")}
             className="w-full border border-gray-300 rounded px-3 py-2"
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Image:
-          </label>
+        <p>Current img</p>
+        {img && (
+          <img
+            src={img}
+            alt="Product Image"
+            className="mt-2 w-40 h-40 object-cover border border-gray-300 rounded"
+          />
+        )}
+        <div>
           <input
             type="file"
             accept="image/*"
             {...register("image", { required: true })}
             className="border border-gray-300 rounded px-3 py-2"
           />
+          <p className="mt-2 text-gray-400">
+            If you want to change image choose file
+          </p>
         </div>
         <button
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          Add Product
+          Submit
         </button>
       </form>
     </div>
   );
 };
 
-export default AddProduct;
+export default UpdatedProduct;

@@ -13,6 +13,8 @@ import AllUser from "../Layout/Dashboard/AllUser";
 import AddProduct from "../Layout/Dashboard/AddProduct";
 import AdminRoutes from "./AdminRoutes";
 import ManageProducts from "../Layout/Dashboard/ManageProducts";
+import UpdatedProduct from "../Layout/Dashboard/UpdatedProduct";
+import Payment from "../Layout/Dashboard/Payment/Payment";
 
 export const router = createBrowserRouter([
   {
@@ -69,12 +71,52 @@ export const router = createBrowserRouter([
       },
       {
         path: "allusers",
-        element: <AdminRoutes><AllUser></AllUser></AdminRoutes> ,
+        element: (
+          <AdminRoutes>
+            <AllUser></AllUser>
+          </AdminRoutes>
+        ),
       },
       {
-        path:'manageProducts',
-        element:<ManageProducts></ManageProducts>
-      }
+        path: "manageProducts",
+        element: (
+          <AdminRoutes>
+            <ManageProducts></ManageProducts>
+          </AdminRoutes>
+        ),
+      },
+      {
+        path: "payment",
+        element: <Payment></Payment>,
+      },
+      {
+        path: "updatedProduct/:id",
+        element: (
+          <AdminRoutes>
+            <UpdatedProduct></UpdatedProduct>
+          </AdminRoutes>
+        ),
+        loader: ({ params }) => {
+          const fetchData = async () => {
+            try {
+              const res = await fetch(
+                `http://localhost:5000/all-products/${params.id}`
+              );
+              if (res.ok) {
+                const data = await res.json();
+                return data;
+              }
+            } catch (error) {
+              console.error(
+                "Error Fetching data for update product client",
+                error
+              );
+              return null;
+            }
+          };
+          return fetchData();
+        },
+      },
     ],
   },
 ]);

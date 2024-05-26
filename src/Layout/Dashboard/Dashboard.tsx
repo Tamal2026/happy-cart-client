@@ -70,13 +70,6 @@ const Dashboard: React.FC = () => {
               <h1>Back to Home</h1>
             </li>
           </Link>
-
-          <li className="px-6 py-2 hover:bg-blue-700">
-            <Link to="/dashboard/analytics">Analytics</Link>
-          </li>
-          <li className="px-6 py-2 hover:bg-blue-700">
-            <Link to="/dashboard/integrations">Integrations</Link>
-          </li>
         </ul>
       </aside>
 
