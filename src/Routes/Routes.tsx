@@ -45,6 +45,7 @@ export const router = createBrowserRouter([
         path: "/cart",
         element: <Cart></Cart>,
       },
+
       {
         path: "/checkout",
         element: <Checkout></Checkout>,
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
         path: "purchasedHistory",
 
         element: <PurchasedHistory></PurchasedHistory>,
+      },
+      {
+        path: "payment",
+        element: <Payment></Payment>,
       },
       // Admin ROutes
       {
@@ -84,10 +89,6 @@ export const router = createBrowserRouter([
             <ManageProducts></ManageProducts>
           </AdminRoutes>
         ),
-      },
-      {
-        path: "payment",
-        element: <Payment></Payment>,
       },
       {
         path: "updatedProduct/:id",
