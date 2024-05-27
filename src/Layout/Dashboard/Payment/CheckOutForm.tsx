@@ -1,26 +1,30 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
+import { AuthContext } from "../../../providers/AuthProvider";
 
 const CheckOutForm = () => {
   const [error, setError] = useState<string>("");
   const [clientSecret, setClientSecret] = useState<string | undefined>(
     undefined
   );
+  const [transationId,setTransationId] = useState('')
 
   const stripe = useStripe();
+  const { user } = useContext(AuthContext);
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
   const [cart] = useCart();
-  const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+  const totalPrice = cart.reduce((total, item) => total + item.price *item.quantity, 0);
 
   useEffect(() => {
-    axiosSecure.post("/create-payment-intent", {
+    axiosSecure
+      .post("/create-payment-intent", {
         price: totalPrice,
       })
       .then((res) => {
-        console.log("Response from backend",res.data);
+        console.log("Response from backend", res.data);
         if (res.data.clientSecret) {
           setClientSecret(res.data.clientSecret);
         } else {
@@ -54,6 +58,26 @@ const CheckOutForm = () => {
       console.log("Payment Method", paymentMethod);
       setError("");
     }
+
+    const { paymentIntent, error: ConfirmError } =
+      await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: card,
+          billing_details: {
+            email: user.email || "anonymous",
+            name: user?.displayName || "anonymous",
+          },
+        },
+      });
+    if (ConfirmError) {
+      console.log("Confirm error");
+    } else {
+      console.log("payment intent", paymentIntent);
+      if(paymentIntent.status ===  
+        "succeeded"){
+          setTransationId(paymentIntent.id)
+        }
+    }
   };
 
   return (
@@ -76,7 +100,7 @@ const CheckOutForm = () => {
       />
       <p className="text-red-500 mt-2">{error}</p>
       {clientSecret === undefined ? (
-       <span className="loading loading-bars loading-lg"></span>
+        <span className="loading loading-bars loading-lg"></span>
       ) : (
         <button
           type="submit"
@@ -86,6 +110,9 @@ const CheckOutForm = () => {
           Pay
         </button>
       )}
+{
+  transationId && <p className="text-green-500">Your transationId {transationId}</p>
+}
     </form>
   );
 };

@@ -7,13 +7,13 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Cart = () => {
   const axiosSecure = useAxiosSecure();
-  const [cart, refetch] = useCart();
+  const [cart, refetchCart] = useCart();
   const [quantities, setQuantities] = useState([]);
 
-  // Initialize quantities state when the cart changes
+  // Initialize quantities state only on component mount
   useEffect(() => {
     setQuantities(cart.map(() => 1));
-  }, [cart]);
+  }, []);
 
   const totalPrice = cart.reduce(
     (total, item, index) => total + item.price * quantities[index],
@@ -38,7 +38,7 @@ const Cart = () => {
     });
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -56,7 +56,7 @@ const Cart = () => {
               text: "Your file has been deleted.",
               icon: "success",
             });
-            refetch();
+            refetchCart();
           }
         });
       }
@@ -129,7 +129,9 @@ const Cart = () => {
         </div>
         <div className="px-4 py-3 border-t border-gray-200 flex justify-between">
           {cart.length ? (
-            <Link to="/dashboard/payment"> <button  className="btn bg-sky-600 text-white text-xl">Pay</button></Link>
+            <Link to="/dashboard/payment">
+              <button className="btn bg-sky-600 text-white text-xl">Pay</button>
+            </Link>
           ) : (
             <button disabled className="btn bg-sky-600 text-white text-xl">Pay</button>
           )}
