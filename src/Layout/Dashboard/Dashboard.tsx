@@ -13,9 +13,12 @@ const Dashboard: React.FC = () => {
         </div>
         {isAdmin ? (
           <ul className="mt-6">
-            <li className="px-6 py-2 hover:bg-blue-700">
-              <Link to="/dashboard/overview">Overview</Link>
-            </li>
+            <NavLink to="/dashboard/adminOverview">
+              <li className="px-6 py-2 hover:bg-blue-700">
+                
+                <h1>Overview</h1>
+              </li>
+            </NavLink>
             <NavLink to="/dashboard/manageProducts">
               <li className="px-6 py-2 hover:bg-blue-700">
                 <h1>Mange Products</h1>

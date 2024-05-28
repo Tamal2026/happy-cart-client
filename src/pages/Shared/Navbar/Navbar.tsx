@@ -6,9 +6,11 @@ import { FaCartShopping } from "react-icons/fa6";
 import useCart from "../../../hooks/useCart";
 
 import { FaLongArrowAltRight } from "react-icons/fa";
+import useAdmin from "../../../hooks/useAdmin";
 
 const Navbar = () => {
   const [cart] = useCart();
+  const [isAdmin] = useAdmin();
   const { user, logOut } = useContext(AuthContext);
 
   const handleLogOut = () => {
@@ -57,11 +59,18 @@ const Navbar = () => {
               <li>
                 <Link to="/contact">Contact</Link>
               </li>
-              <li className="text-black">
-                <h1>
-                  Cart<FaCartShopping></FaCartShopping>
-                </h1>
-              </li>
+              {isAdmin ? (
+              ""
+            ) : (
+              <Link to={user ? "/cart" : "/login"}>
+                <li>
+                  <h1 className="bg-amber-500 hover:bg-black text-white">
+                    <FaCartShopping className="text-sm "></FaCartShopping>+
+                    {cart.length}
+                  </h1>
+                </li>
+              </Link>
+            )}
               <li>
                 {user ? (
                   <>
@@ -113,20 +122,24 @@ const Navbar = () => {
             <li>
               <Link to="/contact">Contact</Link>
             </li>
-            <Link to="/cart">
-              <li>
-                <h1 className="bg-amber-500 hover:bg-black text-white">
-                  <FaCartShopping className="text-sm "></FaCartShopping>+
-                  {cart.length}
-                </h1>
-              </li>
-            </Link>
+            {isAdmin ? (
+              ""
+            ) : (
+              <Link to={user ? "/cart" : "/login"}>
+                <li>
+                  <h1 className="bg-amber-500 hover:bg-black text-white">
+                    <FaCartShopping className="text-sm "></FaCartShopping>+
+                    {cart.length}
+                  </h1>
+                </li>
+              </Link>
+            )}
             <li></li>
             <li>
               {user ? (
                 <>
                   <details>
-                <summary>Dashbaord</summary>
+                    <summary>Dashbaord</summary>
                     <ul className="p-2">
                       <li>
                         <Link to="/dashboard">
