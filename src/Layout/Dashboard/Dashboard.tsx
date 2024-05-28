@@ -36,7 +36,7 @@ const Dashboard: React.FC = () => {
               <Link to="/checkout">Messages</Link>
             </li>
             <li className="px-6 py-2 hover:bg-blue-700">
-              <Link to="/dashboard/support">Support</Link>
+              <Link to="/dashboard/paymentHistory">Payment HIstory user</Link>
             </li>
             <hr className="my-4 border-gray-600" />
           </ul>
@@ -45,9 +45,11 @@ const Dashboard: React.FC = () => {
             <li className="px-6 py-2 hover:bg-blue-700">
               <Link to="/dashboard/overview">Overview</Link>
             </li>
-            <li className="px-6 py-2 hover:bg-blue-700">
-              <Link to="/dashboard/allusers">Alddl Users</Link>
-            </li>
+            <NavLink to="/dashboard/paymentHistory">
+              <li className="px-6 py-2 hover:bg-blue-700">
+                <h1>Payment History</h1>
+              </li>
+            </NavLink>
             <li className="px-6 py-2 hover:bg-blue-700">
               <Link to="/dashboard/settings">Settings</Link>
             </li>

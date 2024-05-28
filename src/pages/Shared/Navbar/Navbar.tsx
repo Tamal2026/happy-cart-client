@@ -126,7 +126,7 @@ const Navbar = () => {
               {user ? (
                 <>
                   <details>
-                    <summary>Dashboard</summary>
+                <summary>Dashbaord</summary>
                     <ul className="p-2">
                       <li>
                         <Link to="/dashboard">
