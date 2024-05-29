@@ -74,7 +74,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "userOverview",
-        element: <UserOverview>a</UserOverview>,
+        element: <UserOverview></UserOverview>,
       },
       // Admin ROutes
       {

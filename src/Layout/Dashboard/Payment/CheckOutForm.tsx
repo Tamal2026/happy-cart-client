@@ -30,7 +30,7 @@ const CheckOutForm = () => {
           price: totalPrice,
         })
         .then((res) => {
-          if (res.data.clientSecret || res.data.paymentResult.insertedId) {
+          if (res.data.clientSecret) {
             setClientSecret(res.data.clientSecret);
           } else {
             setError("Failed to fetch client secret");

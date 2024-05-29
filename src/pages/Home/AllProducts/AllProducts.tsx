@@ -17,7 +17,7 @@ interface Product {
 }
 
 const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState<number>(1);
 
   return (
     <Modal
@@ -101,7 +101,7 @@ const AllProducts = () => {
           Swal.fire({
             position: "center",
             icon: "success",
-            title: "Your product has been added to the cart",
+            title: `${product.name} has been added to the cart`,
             showConfirmButton: false,
             timer: 1500,
           });

@@ -1,13 +1,25 @@
-import { useEffect, useState } from "react";
-import { FaCartPlus, FaStar } from "react-icons/fa";
+import { useContext, useEffect, useState } from "react";
+import { FaStar } from "react-icons/fa";
+import { AuthContext } from "../../providers/AuthProvider";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useCart from "../../hooks/useCart";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 interface Product {
   name: string;
   price: number;
   img: string;
+  category: string;
+  _id: string;
+  email: string;
 }
 
 const BestSellerProducts = () => {
+  const navigate = useNavigate();
+  const [, refetch] = useCart();
+  const axiosSecure = useAxiosSecure();
+  const { user } = useContext(AuthContext);
   const [bestSellerProducts, setBestSellerProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -19,6 +31,44 @@ const BestSellerProducts = () => {
         setLoading(false);
       });
   }, []);
+
+  const handleAddToCart = (product: Product) => {
+    if (user && user.email) {
+      const cartItem = {
+        itemId: product._id,
+        email: user.email,
+        name: product.name,
+        img: product.img,
+        price: product.price,
+      };
+      axiosSecure.post("/cart", cartItem).then((res) => {
+        if (res.data.insertedId) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: `${product.name} has been added to the cart`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          refetch();
+        }
+      });
+    } else {
+      Swal.fire({
+        title: "You are not Logged In",
+        text: "Please login to add to the cart",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Login!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login", { state: { from: location } });
+        }
+      });
+    }
+  };
 
   return (
     <div className="my-10">
@@ -36,32 +86,33 @@ const BestSellerProducts = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {bestSellerProducts.map((product, index) => (
-              <div key={index} className="card bg-slate-100 h-80  hover:shadow-2xl">
+              <div
+                key={index}
+                className="card bg-slate-100 h-80  hover:shadow-2xl"
+              >
                 <figure className="px-10 pt-10">
                   <img
                     src={product.img}
                     alt={product.name}
-                    className="rounded-xl mt-10 h-48"
+                    className="rounded-xl mt-10 h-52"
                   />
                 </figure>
-                
-                <div className="flex gap-x-4 text-xl  mx-auto ">
-                  <FaStar className="checked text-green-600" />
-                  <FaStar className="checked text-green-600" />
-                  <FaStar className="checked text-green-600" />
-                  <FaStar className="text-green-600"/>
-                  <FaStar />
-                </div>
-
                 <div className="card-body items-center text-center">
-                  <h2 className="card-title text-2xl ">{product.name}</h2>
+                  <h2 className="card-title text-xl ">{product.name}</h2>
                   <hr />
                   <div className="card-actions">
-                    <h1 className="font-semibold text-xl text-gray-600">${product.price}/kg</h1>
-                    <button className="btn-primary font-bold bg-orange-600 text-2xl p-3 rounded-lg text-white">
-                      <FaCartPlus />
-                    </button>
+                    <h1 className="font-semibold text-md text-gray-600">
+                      ${product.price}/kg
+                    </h1>
                   </div>
+                </div>
+
+                <div className="flex gap-x-4 text-xl mb-4 mx-auto ">
+                  <FaStar className="checked text-green-600" />
+                  <FaStar className="checked text-green-600" />
+                  <FaStar className="checked text-green-600" />
+                  <FaStar className="text-green-600" />
+                  <FaStar />
                 </div>
               </div>
             ))}
