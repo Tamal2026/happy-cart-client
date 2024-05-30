@@ -18,6 +18,7 @@ import Payment from "../Layout/Dashboard/Payment/Payment";
 import PaymentHistory from "../Layout/Dashboard/PaymentHistory/PaymentHistory";
 import UserOverview from "../Layout/Dashboard/UserOverview/UserOverview";
 import AdminOverview from "../Layout/Dashboard/AdminOverview/AdminOverview";
+import AddReview from "../Layout/Dashboard/AddReview/AddReview";
 
 export const router = createBrowserRouter([
   {
@@ -75,6 +76,10 @@ export const router = createBrowserRouter([
       {
         path: "userOverview",
         element: <UserOverview></UserOverview>,
+      },
+      {
+        path: "addreview",
+        element: <AddReview></AddReview>,
       },
       // Admin ROutes
       {

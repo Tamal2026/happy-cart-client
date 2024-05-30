@@ -29,18 +29,24 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
     >
       <div className="bg-white rounded-lg shadow-lg w-96 p-6">
         <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
-        <img className="h-60 w-full mb-4 object-cover" src={product.img} alt="" />
+        <img
+          className="h-60 w-full mb-4 object-cover"
+          src={product.img}
+          alt=""
+        />
+        <p className="mb-2">Category: {product.category}</p>
         <p className="mb-2">Price: ${product.price} / kg</p>
-        <p className="mb-4">Category: {product.category}</p>
+
         <div className="mb-4">
           <label className="block mb-1 font-semibold">
             Quantity:
             <input
-              type="number"
+            
               min="1"
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
               className="ml-2 border rounded px-2 py-1 w-full"
+            
             />
           </label>
         </div>
@@ -142,14 +148,18 @@ const AllProducts = () => {
         const index = acc.findIndex((item) => item.category === curr.category);
         if (index === -1) {
           acc.push(curr);
-        } else if (acc.filter((item) => item.category === curr.category).length < 4) {
+        } else if (
+          acc.filter((item) => item.category === curr.category).length < 4
+        ) {
           acc.push(curr);
         }
         return acc;
       }, []);
       setFilteredProducts(filtered);
     } else {
-      const filtered = allProducts.filter((product) => product.category === category);
+      const filtered = allProducts.filter(
+        (product) => product.category === category
+      );
       setFilteredProducts(filtered);
     }
   };
@@ -157,28 +167,38 @@ const AllProducts = () => {
   return (
     <div className="w-[1400px] gap-4 mx-auto">
       <div className="flex items-center justify-evenly mr-12 ">
-        <h1 className="text-3xl my-8 font-medium justify-start">Shop Our Products</h1>
+        <h1 className="text-3xl my-8 font-medium justify-start">
+          Shop Our Products
+        </h1>
         <div>
           <button
-            className={`btn bg-amber-500 text-white mr-5 ${activeCategory === "all" ? "active" : ""}`}
+            className={`btn bg-amber-500 text-white mr-5 hover:bg-amber-600 ${
+              activeCategory === "all" ? "active" : ""
+            }`}
             onClick={() => filterProductsByCategory("all")}
           >
             All Products
           </button>
           <button
-            className={`btn bg-emerald-500 text-white mr-5 ${activeCategory === "Vegetable" ? "active" : ""}`}
+            className={`btn bg-emerald-500 text-white mr-5 hover:bg-emerald-600 ${
+              activeCategory === "Vegetable" ? "active" : ""
+            }`}
             onClick={() => filterProductsByCategory("Vegetable")}
           >
             Vegetables
           </button>
           <button
-            className={`btn text-white bg-cyan-500 mr-5 ${activeCategory === "Fruits" ? "active" : ""}`}
+            className={`btn text-white bg-cyan-500 mr-5 hover:bg-cyan-600 ${
+              activeCategory === "Fruits" ? "active" : ""
+            }`}
             onClick={() => filterProductsByCategory("Fruits")}
           >
             Fruits
           </button>
           <button
-            className={`btn bg-rose-500 text-white mr-5 ${activeCategory === "meat" ? "active" : ""}`}
+            className={`btn bg-rose-500 text-white mr-5 hover:bg-rose-600 ${
+              activeCategory === "meat" ? "active" : ""
+            }`}
             onClick={() => filterProductsByCategory("meat")}
           >
             Meat

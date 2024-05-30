@@ -16,16 +16,16 @@ const PaymentHistory = () => {
 
   return (
     <div>
-      <h1>Total Paymets: {payments.length}</h1>
+      <h1 className="text-2xl font-semibold">Total Paymets: {payments.length}</h1>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto w-3/4">
         <table className="table table-zebra-zebra">
           <thead>
             <tr>
               <th>#</th>
               <th>Price</th>
               <th>Transation Id</th>
-              <th>Status</th>
+         
             </tr>
           </thead>
           <tbody>
@@ -34,7 +34,7 @@ const PaymentHistory = () => {
                 <th>{index + 1}</th>
                 <td>$ {payment.price}</td>
                 <td>{payment.transationId}</td>
-                <td>{payment.status}</td>
+                
               </tr>
             ))}
           </tbody>

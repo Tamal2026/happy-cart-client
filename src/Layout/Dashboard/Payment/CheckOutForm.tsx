@@ -4,15 +4,39 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
 import { AuthContext } from "../../../providers/AuthProvider";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Modal from "react-modal";
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    borderRadius: "8px",
+    boxShadow: "0px 4px 24px rgba(0, 0, 0, 0.2)",
+    border: "none",
+    padding: "24px",
+    maxWidth: "400px",
+    width: "100%",
+    transition: "all 0.3s ease-in-out",
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: "1000",
+  },
+};
+
+Modal.setAppElement("#root");
 
 const CheckOutForm = () => {
   const [error, setError] = useState<string>("");
   const [clientSecret, setClientSecret] = useState<string | undefined>(
     undefined
   );
-  const [transationId, setTransationId] = useState("");
-
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const stripe = useStripe();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
@@ -23,6 +47,7 @@ const CheckOutForm = () => {
     (total, item) => total + item.price * item.quantity,
     0
   );
+
   useEffect(() => {
     if (totalPrice > 0) {
       axiosSecure
@@ -82,6 +107,7 @@ const CheckOutForm = () => {
 
       const payment = {
         email: user.email,
+        name: user.displayName,
         price: totalPrice,
         transationId: paymentIntent.id,
         date: new Date(), // Utc date convert using moment.js // TODo
@@ -98,10 +124,13 @@ const CheckOutForm = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-
-        navigate("/");
+        setReviewModalOpen(true);
       }
     }
+  };
+
+  const handleCloseReviewModal = () => {
+    setReviewModalOpen(false);
   };
 
   return (
@@ -138,10 +167,27 @@ const CheckOutForm = () => {
             Pay
           </button>
         )}
-        {transationId && (
-          <p className="text-green-500">Your transationId {transationId}</p>
-        )}
       </form>
+
+      <Modal
+        isOpen={reviewModalOpen}
+        onRequestClose={handleCloseReviewModal}
+        style={customStyles}
+      >
+        <div>
+          <div>
+            <Link to="/dashboard/addreview">
+              {" "}
+              <button className="btn bg-green-500 text-white font-bold text-xl">Add a Review</button>
+            </Link>
+            <Link to="/">
+             
+              <button className="btn bg-red-500 text-white font-bold text-xl">Back to home</button>
+            </Link>
+            
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };
