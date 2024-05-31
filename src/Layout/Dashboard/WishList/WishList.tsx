@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 
 const WishList = () => {
   const axiosSecure = useAxiosSecure();
+
   const { user } = useContext(AuthContext);
   const { data: wishData = [], refetch } = useQuery({
     queryKey: ["wishData"],
@@ -15,34 +16,29 @@ const WishList = () => {
     },
   });
 
-  const handleWishList = async (product) => {
-    try {
-      const res = await axiosSecure.post('/wishlist', product);
-      if (res.data.insertedId) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Item added to wishlist",
-          showConfirmButton: false,
-          timer: 1500
+  const handleDelete = (productId, productName) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/wishlist/${productId}`).then((res) => {
+          if (res.data.deletedCount > 0) {
+            refetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: `${productName}  has been deleted.`,
+              icon: "success",
+            });
+          }
         });
       }
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "This item is already in your wishlist",
-        });
-      } else {
-        console.error("Error adding item to wishlist:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Failed to add item to wishlist",
-        });
-      }
-    }
+    });
   };
 
   return (
@@ -79,13 +75,11 @@ const WishList = () => {
                   </div>
                 </td>
                 <td className="font-semibold">{wish.price}</td>
-                <td>
-                  <button
-                    className="btn bg-blue-500 text-white"
-                    onClick={() => handleWishList(wish)}
-                  >
-                    Add to Wishlist
-                  </button>
+                <td
+                  className="btn bg-red-500 text-white"
+                  onClick={() => handleDelete(wish._id, wish.name)}
+                >
+                  Remove
                 </td>
               </tr>
             ))}
