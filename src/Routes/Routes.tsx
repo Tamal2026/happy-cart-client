@@ -19,6 +19,7 @@ import PaymentHistory from "../Layout/Dashboard/PaymentHistory/PaymentHistory";
 import UserOverview from "../Layout/Dashboard/UserOverview/UserOverview";
 import AdminOverview from "../Layout/Dashboard/AdminOverview/AdminOverview";
 import AddReview from "../Layout/Dashboard/AddReview/AddReview";
+import AllProducts from "../pages/Home/AllProducts/AllProducts";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
       {
         path: "/signUp",
         element: <SignUp></SignUp>,
+      },
+      {
+        path: "/products:category",
+        element: <AllProducts></AllProducts>,
       },
       {
         path: "/cart",

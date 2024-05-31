@@ -60,17 +60,17 @@ const Navbar = () => {
                 <Link to="/contact">Contact</Link>
               </li>
               {isAdmin ? (
-              ""
-            ) : (
-              <Link to={user ? "/cart" : "/login"}>
-                <li>
-                  <h1 className="bg-amber-500 hover:bg-black text-white">
-                    <FaCartShopping className="text-sm "></FaCartShopping>+
-                    {cart.length}
-                  </h1>
-                </li>
-              </Link>
-            )}
+                ""
+              ) : (
+                <Link to={user ? "/cart" : "/login"}>
+                  <li>
+                    <h1 className="bg-amber-500 hover:bg-black text-white">
+                      <FaCartShopping className="text-sm "></FaCartShopping>+
+                      {cart.length}
+                    </h1>
+                  </li>
+                </Link>
+              )}
               <li>
                 {user ? (
                   <>
@@ -107,15 +107,21 @@ const Navbar = () => {
               <details>
                 <summary>Category</summary>
                 <ul className="p-2">
-                  <li>
-                    <a>Vegetable</a>
-                  </li>
+                  <Link to="/products/vegetable">
+                    <li>
+                      <a>Vegetable</a>
+                    </li>
+                  </Link>
+
                   <li>
                     <a>Fruit</a>
                   </li>
-                  <li>
-                    <a>Meat</a>
-                  </li>
+                  <Link to="">
+                    {" "}
+                    <li>
+                      <a>Meat</a>
+                    </li>
+                  </Link>
                 </ul>
               </details>
             </li>

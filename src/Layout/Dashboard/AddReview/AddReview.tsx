@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import { AuthContext } from "../../../providers/AuthProvider";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const AddReview = () => {
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
+  const axiosPublic = useAxiosPublic();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate()
 
   const handleTextAreaChange = (e) => {
     setReviewText(e.target.value);
@@ -12,11 +19,24 @@ const AddReview = () => {
     setRating(newRating);
   };
 
-  const handleSubmit = () => {
-  
-    console.log("Review text:", reviewText);
-    console.log("Rating:", rating);
- 
+  const reviewData = {
+    name: user.displayName,
+    email: user.email,
+    reviewText: reviewText,
+    rating: rating,
+  };
+
+  const handleSubmit = async () => {
+    const res = await axiosPublic.post("/reviews", reviewData);
+    if (res.data.insertedId) {
+      Swal.fire({
+        icon: "success",
+        title: "Thanks For your Feedback",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    }
+    navigate('/')
     setReviewText("");
     setRating(0);
   };
@@ -34,16 +54,25 @@ const AddReview = () => {
       <div className="flex w-1/6 justify-between items-center mb-5">
         <p className="font-semibold ">Give Rating:</p>
         {[1, 2, 3, 4, 5].map((star) => (
-          <span className="text-3xl"
+          <span
+            className="text-3xl"
             key={star}
             onClick={() => handleRatingChange(star)}
-            style={{ cursor: "pointer", color: star <= rating ? "#90ee90" : "gray" }}
+            style={{
+              cursor: "pointer",
+              color: star <= rating ? "#90ee90" : "gray",
+            }}
           >
             ★
           </span>
         ))}
       </div>
-      <button className="btn bg-blue-500 text-white font-bold" onClick={handleSubmit}>Submit Review</button>
+      <button
+        className="btn bg-blue-500 text-white font-bold"
+        onClick={handleSubmit}
+      >
+        Submit Review
+      </button>
     </div>
   );
 };
