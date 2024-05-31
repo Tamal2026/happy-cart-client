@@ -20,6 +20,7 @@ import UserOverview from "../Layout/Dashboard/UserOverview/UserOverview";
 import AdminOverview from "../Layout/Dashboard/AdminOverview/AdminOverview";
 import AddReview from "../Layout/Dashboard/AddReview/AddReview";
 import AllProducts from "../pages/Home/AllProducts/AllProducts";
+import WishList from "../Layout/Dashboard/WishList/WishList";
 
 export const router = createBrowserRouter([
   {
@@ -85,6 +86,10 @@ export const router = createBrowserRouter([
       {
         path: "addreview",
         element: <AddReview></AddReview>,
+      },
+      {
+        path: "wishlist",
+        element: <WishList></WishList>,
       },
       // Admin ROutes
       {

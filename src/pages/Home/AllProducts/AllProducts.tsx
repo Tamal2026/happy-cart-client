@@ -1,11 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import { FaCartPlus } from "react-icons/fa";
+import { FaCartPlus, FaRegPlusSquare } from "react-icons/fa";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
+import { FaRegHeart } from "react-icons/fa6";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 interface Product {
   name: string;
@@ -14,6 +16,7 @@ interface Product {
   category: string;
   _id: string;
   email: string;
+  short_desc:string;
 }
 
 const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
@@ -41,12 +44,10 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
           <label className="block mb-1 font-semibold">
             Quantity:
             <input
-            
               min="1"
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
               className="ml-2 border rounded px-2 py-1 w-full"
-            
             />
           </label>
         </div>
@@ -72,6 +73,7 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
 const AllProducts = () => {
   const [, refetch] = useCart();
   const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic()
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useContext(AuthContext);
@@ -131,6 +133,35 @@ const AllProducts = () => {
       });
     }
   };
+
+  const handleWishList = (product:Product)=>{
+    if(user && user.email){
+      const wishlist = {
+        itemId: product._id,
+        email: user.email,
+        name: product.name,
+        img: product.img,
+        price: product.price,
+        short_desc: product.short_desc
+
+      }
+      axiosPublic.post('/wishlist', wishlist).then(res =>{
+        if(res.data.insertedId){
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+      })
+      
+    }
+
+
+
+  }
 
   useEffect(() => {
     fetch("http://localhost:5000/all-products")
@@ -227,13 +258,23 @@ const AllProducts = () => {
               <div className="card-body">
                 <h2 className="card-title">{product.name}</h2>
                 <p className="font-semibold"> ${product.price}/ kg</p>
-                <div className="card-actions justify-end">
-                  <button
-                    onClick={() => handleOpenModal(product)}
-                    className="btn-primary font-bold bg-orange-600 text-2xl p-3 rounded-lg text-white"
-                  >
-                    <FaCartPlus />
-                  </button>
+                <div></div>
+                <div className="card-actions flex justify-between items-center">
+                  <div className="flex items-center ">
+                    <h1 className="card-actions text-xl">
+                      WishList
+                      <FaRegPlusSquare  onClick={()=>handleWishList(product)} className="mt-1 bg-blue-500 text-white text-2xl" />
+                    </h1>
+                  </div>
+
+                  <div>
+                    <button
+                      onClick={() => handleOpenModal(product)}
+                      className="btn-primary font-bold bg-orange-600 text-2xl p-3 rounded-lg text-white"
+                    >
+                      <FaCartPlus />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

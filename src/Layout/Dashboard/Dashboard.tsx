@@ -38,9 +38,9 @@ const Dashboard: React.FC = () => {
           </ul>
         ) : (
           <ul className="mt-6">
-            <li className="px-6 py-2 hover:bg-blue-700">
-              <Link to="/dashboard/UserOverview">Overview</Link>
-            </li>
+            <Link to="/dashboard/UserOverview">
+              <li className="px-6 py-2 hover:bg-blue-700">Overview</li>
+            </Link>
             <NavLink to="/dashboard/paymentHistory">
               <li className="px-6 py-2 hover:bg-blue-700">
                 <h1>Payment History</h1>
@@ -65,10 +65,8 @@ const Dashboard: React.FC = () => {
       </aside>
 
       <main className="flex-1 p-6">
-        <h1 className="text-2xl font-bold">Welcome to your Dashboard</h1>
-        <p className="mt-4">
-          Select an option from the sidebar to get started.
-        </p>
+        <h1 className="text-2xl font-bold mb-7 text-white bg-cyan-500 py-3 w-1/5 text-center rounded-lg mx-auto">Welcome to Dashboard</h1>
+        
         <Outlet />
       </main>
     </div>

@@ -56,7 +56,7 @@ const AllUser = () => {
             refetch();
             Swal.fire({
               title: "Deleted!",
-              text: "Your file has been deleted.",
+              text: `${user.name} user has been deleted.`,
               icon: "success",
             });
           }
