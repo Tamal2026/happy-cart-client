@@ -119,7 +119,7 @@ const Navbar = () => {
                   <Link to="">
                     {" "}
                     <li>
-                      <a>Meat</a>
+                      Meat
                     </li>
                   </Link>
                 </ul>

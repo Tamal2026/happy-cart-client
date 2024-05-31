@@ -5,11 +5,11 @@ import { Carousel } from "react-responsive-carousel";
 const Hero = () => {
   return (
     <div
-      className="flex justify-evenly bg-cover my-7 bg-center"
+      className="flex justify-evenly bg-cover my-7 bg-center "
       style={{
         backgroundImage: `url(${img})`,
         height: "500px",
-        width: "100%",
+        width: "1900px",
       }}
     >
       <div>
@@ -21,19 +21,23 @@ const Hero = () => {
       </div>
 
       <div>
-        <Carousel
-          className="w-[720px] h-64"
-          autoPlay={true}
-          interval={3000} 
-          infiniteLoop={true} 
-          showStatus={false} 
-          showThumbs={false} 
-        >
+        <Carousel className="w-[720px] h-full"
+        
+        autoPlay={true}
+        interval={3500}
+        infiniteLoop={true}
+        showThumbs={false}
+        showStatus={false}
+        showArrows={false}>
+          
           <div>
-            <img src="https://i.ibb.co/DrQ1Zr4/hero-img-1.png" alt="Slide 1" />
+            <img  src="https://i.ibb.co/DrQ1Zr4/hero-img-1.png" />
           </div>
           <div>
-            <img src="https://i.ibb.co/HqNdyrM/hero-img2.jpg" alt="Slide 2" />
+            <img src="https://i.ibb.co/HqNdyrM/hero-img2.jpg" />
+          </div>
+          <div>
+            <img className="h-[400px]" src="https://i.ibb.co/thd146j/meat-main.jpg" />
           </div>
         </Carousel>
       </div>
