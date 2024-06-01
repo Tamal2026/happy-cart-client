@@ -21,6 +21,7 @@ import AdminOverview from "../Layout/Dashboard/AdminOverview/AdminOverview";
 import AddReview from "../Layout/Dashboard/AddReview/AddReview";
 import AllProducts from "../pages/Home/AllProducts/AllProducts";
 import WishList from "../Layout/Dashboard/WishList/WishList";
+import Shop from "../pages/Shop/Shop";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
       {
         path: "/checkout",
         element: <Checkout></Checkout>,
+      },
+      {
+        path: "/shop",
+        element: <Shop></Shop>,
       },
     ],
   },

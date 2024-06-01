@@ -24,7 +24,7 @@ const Hero = () => {
         <Carousel className="w-[720px] h-full"
         
         autoPlay={true}
-        interval={3500}
+        interval={2500}
         infiniteLoop={true}
         showThumbs={false}
         showStatus={false}

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { BiRightArrow } from "react-icons/bi";
 import { FaCartShopping } from "react-icons/fa6";
@@ -45,17 +45,11 @@ const Navbar = () => {
               <li>
                 <Link to="/">Home</Link>
               </li>
-              <li>
-                <Link to="/shop">Category</Link>
-                <ul className="p-2">
-                  <li>
-                    <a>Apple</a>
-                  </li>
-                  <li>
-                    <a>Orange</a>
-                  </li>
-                </ul>
-              </li>
+              <NavLink to="/shop">
+                <li>
+                  <a>Shop</a>
+                </li>
+              </NavLink>
               <li>
                 <Link to="/contact">Contact</Link>
               </li>
@@ -103,28 +97,11 @@ const Navbar = () => {
             <li>
               <Link to="/">Home</Link>
             </li>
-            <li>
-              <details>
-                <summary>Category</summary>
-                <ul className="p-2">
-                  <Link to="/products/vegetable">
-                    <li>
-                      <a>Vegetable</a>
-                    </li>
-                  </Link>
-
-                  <li>
-                    <a>Fruit</a>
-                  </li>
-                  <Link to="">
-                    {" "}
-                    <li>
-                      Meat
-                    </li>
-                  </Link>
-                </ul>
-              </details>
-            </li>
+            <NavLink to="/shop">
+              <li>
+                <a>Shop</a>
+              </li>
+            </NavLink>
             <li>
               <Link to="/contact">Contact</Link>
             </li>
@@ -147,11 +124,19 @@ const Navbar = () => {
                   <details>
                     <summary>Dashbaord</summary>
                     <ul className="p-2">
-                      <li>
-                        <Link to="/dashboard">
-                          <button>Dashboard</button>
-                        </Link>
-                      </li>
+                      {user && isAdmin ? (
+                        <li>
+                          <Link to="/dashboard/adminOverview">
+                            <button>Dashboard</button>
+                          </Link>
+                        </li>
+                      ) : (
+                        <li>
+                          <Link to="/dashboard/userOverview">
+                            <button>Dashboard</button>
+                          </Link>
+                        </li>
+                      )}
                       <li>
                         <button onClick={handleLogOut}>
                           Logout<FaLongArrowAltRight></FaLongArrowAltRight>

@@ -24,7 +24,7 @@ const FAQ = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Frequently Asked Questions</h1>
+      <h1 className="text-3xl font-bold mb-4">FAQ</h1>
       <div className="space-y-4">
         {faqData.map((faq, index) => (
           <div key={index} className="border rounded p-4">

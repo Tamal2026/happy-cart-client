@@ -1,4 +1,4 @@
-import { FaLocationDot } from "react-icons/fa6";
+import { FaLocationDot, FaPhone } from "react-icons/fa6";
 import { MdOutgoingMail } from "react-icons/md";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -31,7 +31,7 @@ const Contact = () => {
           suggestions. <br /> Our contact page provides an easy way to reach us.
           Feel free to send us a message, and we'll promptly respond to your
           queries. <br /> Whether you have questions about our products, orders,
-          or anything else, we're here to help!
+          or anything else, we're here to+ help!
         </h1>
         <div
           id="map"
@@ -91,9 +91,11 @@ const Contact = () => {
                 <h1 className="text-2xl">Mail us</h1>
                 <h1 className="text-gray-400">happycart@gmail.com</h1>
               </div>
+            </div>
+            <div className="h-24 flex items-center gap-3 w-[400px] mb-5 rounded-lg bg-white">
               <div>
                 <h1 className="text-4xl pl-4 text-green-500">
-                  <FaLocationDot />
+                  <FaPhone />
                 </h1>
               </div>
               <div>
