@@ -4,7 +4,7 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Shop = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1); 
+  const [currentPage, setCurrentPage] = useState(1);
   const axiosPublic = useAxiosPublic();
   const productsPerPage = 6;
 
@@ -18,15 +18,19 @@ const Shop = () => {
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+
+  // Filter products based on selected category or show all products
+  const currentProducts = selectedProduct
+    ? products.filter((product) => product.category === selectedProduct).slice(
+        indexOfFirstProduct,
+        indexOfLastProduct
+      )
+    : products.slice(indexOfFirstProduct, indexOfLastProduct);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleOptionChange = (e) => {
-    setSelectedProduct(e.target.value);
+    setSelectedProduct(e.target.value === "allProducts" ? null : e.target.value);
   };
 
   return (
@@ -53,32 +57,52 @@ const Shop = () => {
         </div>
 
         <div className="mr-2">
-          <select className="border rounded-md px-4 py-2 w-full mt-4">
-            <option value="" disabled>
-              Sort by...
-            </option>
-            <option value="price">Price</option>
-            <option value="name">Name</option>
+          <select
+            className="border rounded-md px-4 py-2 w-full mt-4"
+            onChange={handleOptionChange}
+          >
+            <option value="allProducts">All Products</option>
+            <option value="Vegetable">Vegetable</option>
+            <option value="Fruits">F
+            ruit</option>
+            <option value="meat">Meat</option>
           </select>
         </div>
       </div>
 
       <div className="grid max-w-screen-2xl mx-auto grid-cols-5 mt-6">
         <div className="col-span-1 category">
-          <h1 className="text-xl font-serif font-semibold">Categories</h1>
+          <h1 className="text-xl font-serif font-semibold mb-5">Categories</h1>
           <div className="flex items-center">
             <input
               type="radio"
               name="food"
-              id="vegetable"
-              value="vegetable"
-              checked={selectedProduct === "vegetable"}
+              id="allProducts"
+              value="allProducts"
+              checked={selectedProduct === "allProducts"}
+              onChange={handleOptionChange}
+              className="mr-2 p-2"
+            />
+            <label
+              htmlFor="allProducts"
+              className="text-red-500 font-semi-bold text-xl"
+            >
+              All Products
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="radio"
+              name="food"
+              id="Vegetable"
+              value="Vegetable"
+              checked={selectedProduct === "Vegetable"}
               onChange={handleOptionChange}
               className="mr-2"
             />
             <label
               htmlFor="vegetable"
-              className="text-green-400 font-bold text-xl"
+              className="text-green-400 font-semi-bold text-xl"
             >
               Vegetable
             </label>
@@ -87,9 +111,9 @@ const Shop = () => {
             <input
               type="radio"
               name="food"
-              id="fruit"
-              value="fruit"
-              checked={selectedProduct === "fruit"}
+              id="Fruits"
+              value="Fruits"
+              checked={selectedProduct === "Fruits"}
               onChange={handleOptionChange}
               className="mr-2"
             />
@@ -123,27 +147,26 @@ const Shop = () => {
           <div className="grid grid-cols-3 gap-y-5">
             {currentProducts.map((product) => (
               <div
-              key={product._id}
-              className="card bg-transparent-glass w-5/6 h-96 hover:shadow-gray-500 shadow-2xl bg-base-100 col-span-1 bg-opacity-75"
-            >
-              <figure>
-                <img
-                  className="h-[250px] w-full"
-                  src={product.img}
-                  alt="Shoes"
-                />
-              </figure>
-              <div className="card-body">
-                <h2 className="card-title">{product.name}</h2>
-                <p className="font-bold">${product.price}/kg</p>
-                <div className="card-actions justify-end">
-                  <button className="btn text-xl bg-sky-500 text-white font-bold">
-                    Add to cart
-                  </button>
+                key={product._id}
+                className="card bg-transparent-glass w-5/6 h-96 hover:shadow-gray-500 shadow-2xl bg-base-100 col-span-1 bg-opacity-75"
+              >
+                <figure>
+                  <img
+                    className="h-[250px] w-full"
+                    src={product.img}
+                    alt="Shoes"
+                  />
+                </figure>
+                <div className="card-body">
+                  <h2 className="card-title">{product.name}</h2>
+                  <p className="font-bold">${product.price}/kg</p>
+                  <div className="card-actions justify-end">
+                    <button className="btn text-xl bg-sky-500 text-white font-bold">
+                      Add to cart
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            
             ))}
           </div>
         </div>
