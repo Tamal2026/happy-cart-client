@@ -6,6 +6,7 @@ const Shop = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const axiosPublic = useAxiosPublic();
+  const [searchQuery, setSearchQuery] = useState("");
   const productsPerPage = 6;
 
   const { data: products = [] } = useQuery({
@@ -20,19 +21,34 @@ const Shop = () => {
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
 
   // Filter products based on selected category or show all products
-  const currentProducts = selectedProduct
-    ? products.filter((product) => product.category === selectedProduct).slice(
-        indexOfFirstProduct,
-        indexOfLastProduct
-      )
+  const filteredProducts = selectedProduct
+    ? products
+        .filter((product) => product.category === selectedProduct)
+        .slice(indexOfFirstProduct, indexOfLastProduct)
     : products.slice(indexOfFirstProduct, indexOfLastProduct);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
+
+const searchedProducts = searchQuery
+  ? filteredProducts.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  : filteredProducts;
+
+
+    const currentProducts = searchedProducts.slice(
+      indexOfFirstProduct,
+      indexOfLastProduct
+    );
   const handleOptionChange = (e) => {
-    setSelectedProduct(e.target.value === "allProducts" ? null : e.target.value);
+    setSelectedProduct(
+      e.target.value === "allProducts" ? null : e.target.value
+    );
   };
-
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
   return (
     <>
       <div
@@ -51,6 +67,7 @@ const Shop = () => {
           <input
             type="text"
             placeholder="Search..."
+            onChange={handleSearchChange}
             className="border rounded-md px-4 py-2 w-full pr-10"
           />
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"></div>
@@ -63,8 +80,7 @@ const Shop = () => {
           >
             <option value="allProducts">All Products</option>
             <option value="Vegetable">Vegetable</option>
-            <option value="Fruits">F
-            ruit</option>
+            <option value="Fruits">F ruit</option>
             <option value="meat">Meat</option>
           </select>
         </div>
@@ -79,7 +95,7 @@ const Shop = () => {
               name="food"
               id="allProducts"
               value="allProducts"
-              checked={selectedProduct === "allProducts"}
+              checked={!selectedProduct}
               onChange={handleOptionChange}
               className="mr-2 p-2"
             />
@@ -162,7 +178,7 @@ const Shop = () => {
                   <p className="font-bold">${product.price}/kg</p>
                   <div className="card-actions justify-end">
                     <button className="btn text-xl bg-sky-500 text-white font-bold">
-                      Add to cart
+                      see details
                     </button>
                   </div>
                 </div>
