@@ -140,7 +140,7 @@ const CheckOutForm = () => {
 
   return (
     <>
-      <div>
+      <div className=" mb-10">
         <p>Total amount: </p>
       </div>
       <form onSubmit={handleSubmit}>

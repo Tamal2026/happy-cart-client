@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaCartPlus, FaRegPlusSquare } from "react-icons/fa";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 import Modal from "react-modal";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
-
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import useAdmin from "../../../hooks/useAdmin";
 
@@ -19,10 +18,21 @@ interface Product {
   email: string;
   short_desc: string;
   ItemId: string;
+  quantity:number;
 }
 
 const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
   const [quantity, setQuantity] = useState<number>(1);
+
+  const incrementQuantity = () => {
+    setQuantity(prevQuantity => prevQuantity + 1);
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(prevQuantity => prevQuantity - 1);
+    }
+  };
 
   return (
     <Modal
@@ -32,7 +42,7 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
       className="fixed inset-0 flex items-center justify-center z-50"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
     >
-      <div className="bg-white rounded-lg shadow-lg w-96 p-6">
+      <div className="bg-white rounded-lg shadow-lg w-full sm:w-96 p-6">
         <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
         <img
           className="h-60 w-full mb-4 object-cover"
@@ -45,12 +55,26 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
         <div className="mb-4">
           <label className="block mb-1 font-semibold">
             Quantity:
-            <input
-              min="1"
-              value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
-              className="ml-2 border rounded px-2 py-1 w-full"
-            />
+            <div className="flex items-center mt-2">
+              <button
+                className="btn btn-sm mr-2"
+                onClick={decrementQuantity}
+              >
+                -
+              </button>
+              <input
+                min="1"
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
+                className="border rounded px-2 py-1 w-16 text-center"
+              />
+              <button
+                className="btn btn-sm ml-2"
+                onClick={incrementQuantity}
+              >
+                +
+              </button>
+            </div>
           </label>
         </div>
         <div className="flex justify-between">
@@ -86,6 +110,7 @@ const AllProducts = () => {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const handleOpenModal = (product: Product) => {
     setSelectedProduct(product);
@@ -97,45 +122,47 @@ const AllProducts = () => {
     setModalIsOpen(false);
   };
 
-  const handleAddToCart = (product: Product, quantity: number) => {
+  const handleAddToCart = (product: Product, quantity) => {
     if (user && user.email) {
       const cartItem = {
-        itemId: product._id,
-        email: user.email,
         name: product.name,
-        img: product.img,
-        price: product.price,
-        quantity: quantity,
+        // Add other necessary properties from the product object
       };
-      axiosSecure.post("/cart", cartItem).then((res) => {
-        if (res.data.insertedId) {
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: `${product.name} has been added to the cart`,
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          refetch();
-          handleCloseModal();
-        }
-      });
+  
+      axiosSecure.post("/cart", cartItem)
+        .then((res) => {
+          if (res.data.insertedId) {
+            // Product added to cart successfully
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: `${product.name} has been added to the cart`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            refetch(); // Update cart or UI
+            handleCloseModal(); // Close modal or do any necessary action
+          } else {
+            // Product is already in the cart
+            Swal.fire({
+              position: "top-end",
+              icon: "error",
+              title: `${product.name} is already in the cart`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error adding product to cart:", error);
+          // Handle error, show error message to the user, etc.
+        });
     } else {
-      Swal.fire({
-        title: "You are not Logged In",
-        text: "Please login to add to the cart",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, Login!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate("/login", { state: { from: location } });
-        }
-      });
+      // User is not logged in, handle this case accordingly
     }
   };
+  
+   
 
   const handleWishList = (product: Product) => {
     if (user && user.email) {
@@ -147,12 +174,10 @@ const AllProducts = () => {
         short_desc: product.short_desc,
       };
 
-      
       axiosPublic
         .post("/wishlist", wishlistItem)
         .then((res) => {
           if (res.data.insertedId) {
-            console.log(res.data)
             Swal.fire({
               position: "top-end",
               icon: "success",
@@ -172,7 +197,7 @@ const AllProducts = () => {
         })
         .catch((error) => {
           console.error("Error adding product to wishlist", error);
-          // Handle error case
+       
         });
     }
   };
@@ -182,6 +207,7 @@ const AllProducts = () => {
       .then((res) => res.json())
       .then((data) => {
         setAllProducts(data);
+        setFilteredProducts(data);
         setLoading(false);
       });
   }, []);
@@ -209,46 +235,60 @@ const AllProducts = () => {
     }
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const searchedProducts = searchQuery
+    ? filteredProducts.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : filteredProducts;
+
   return (
-    <div className="w-[1400px] gap-4 mx-auto">
-      <div className="flex items-center justify-evenly mr-12 ">
-        <h1 className="text-3xl my-8 font-medium justify-start">
-          Shop Our Products
-        </h1>
-        <div>
-          <button
-            className={`btn bg-amber-500 text-white mr-5 hover:bg-amber-600 ${
-              activeCategory === "all" ? "active" : ""
-            }`}
-            onClick={() => filterProductsByCategory("all")}
-          >
-            All Products
-          </button>
-          <button
-            className={`btn bg-emerald-500 text-white mr-5 hover:bg-emerald-600 ${
-              activeCategory === "Vegetable" ? "active" : ""
-            }`}
-            onClick={() => filterProductsByCategory("Vegetable")}
-          >
-            Vegetables
-          </button>
-          <button
-            className={`btn text-white bg-cyan-500 mr-5 hover:bg-cyan-600 ${
-              activeCategory === "Fruits" ? "active" : ""
-            }`}
-            onClick={() => filterProductsByCategory("Fruits")}
-          >
-            Fruits
-          </button>
-          <button
-            className={`btn bg-rose-500 text-white mr-5 hover:bg-rose-600 ${
-              activeCategory === "meat" ? "active" : ""
-            }`}
-            onClick={() => filterProductsByCategory("meat")}
-          >
-            Meat
-          </button>
-        </div>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 className="text-3xl font-medium my-8">Shop Our Products</h1>
+      <div className="flex justify-center mb-4">
+        <button
+          className={`btn ${
+            activeCategory === "all" ? "btn-active" : ""
+          } mr-4 bg-amber-600 text-white`}
+          onClick={() => filterProductsByCategory("all")}
+        >
+          All Products
+        </button>
+        <button
+          className={`btn ${
+            activeCategory === "Vegetable" ? "btn-active" : ""
+          } mr-4 bg-green-600 text-white`}
+          onClick={() => filterProductsByCategory("Vegetable")}
+        >
+          Vegetables
+        </button>
+        <button
+          className={`btn ${
+            activeCategory === "Fruits" ? "btn-active" : ""
+          } mr-4 bg-sky-600 text-white`}
+          onClick={() => filterProductsByCategory("Fruits")}
+        >
+          Fruits
+        </button>
+        <button
+          className={`btn ${
+            activeCategory === "meat" ? "btn-active" : ""
+          } mr-4 bg-red-600 text-white`}
+          onClick={() => filterProductsByCategory("meat")}
+        >
+          Meat
+        </button>
+      </div>
+      <div className="relative mb-4">
+        <input
+          type="search"
+          placeholder="Search..."
+          onChange={handleSearchChange}
+          className="border rounded-md px-4  py-2 w-9/12"
+        />
       </div>
       {loading ? (
         <>
@@ -256,11 +296,11 @@ const AllProducts = () => {
           <span className="loading loading-bars loading-lg"></span>
         </>
       ) : (
-        <div className="grid grid-cols-4 gap-y-5">
-          {filteredProducts.map((product, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          {searchedProducts.map((product, index) => (
             <div
               key={index}
-              className="card hover:shadow-2xl h-96 w-80 bg-transparent glass"
+              className="card hover:shadow-2xl h-auto bg-transparent glass"
               style={{
                 backdropFilter: "blur(1px)",
                 backgroundColor: "rgba(255, 255, 255, 0.2)",
@@ -272,7 +312,6 @@ const AllProducts = () => {
               <div className="card-body">
                 <h2 className="card-title">{product.name}</h2>
                 <p className="font-semibold"> ${product.price}/ kg</p>
-                <div></div>
                 <div className="card-actions flex justify-between items-center">
                   <div className="flex items-center ">
                     {user && !isAdmin ? (
@@ -289,12 +328,16 @@ const AllProducts = () => {
                   </div>
 
                   <div>
-                    <button
-                      onClick={() => handleOpenModal(product)}
-                      className=" font-bold bg-orange-600 text-2xl p-3 rounded-lg text-white"
-                    >
-                      <FaCartPlus />
-                    </button>
+                    {isAdmin ? (
+                      ""
+                    ) : (
+                      <button
+                        onClick={() => handleOpenModal(product)}
+                        className=" font-bold bg-orange-600 text-2xl p-3 rounded-lg text-white"
+                      >
+                        <FaCartPlus />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

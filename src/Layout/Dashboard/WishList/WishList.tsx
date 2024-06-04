@@ -6,8 +6,8 @@ import Swal from "sweetalert2";
 
 const WishList = () => {
   const axiosSecure = useAxiosSecure();
-
   const { user } = useContext(AuthContext);
+
   const { data: wishData = [], refetch } = useQuery({
     queryKey: ["wishData"],
     queryFn: async () => {
@@ -32,7 +32,7 @@ const WishList = () => {
             refetch();
             Swal.fire({
               title: "Deleted!",
-              text: `${productName}  has been deleted.`,
+              text: `${productName} has been deleted.`,
               icon: "success",
             });
           }
@@ -42,41 +42,36 @@ const WishList = () => {
   };
 
   return (
-    <div>
-      <p className="text-2xl font-bold">Total WishList: {wishData.length}</p>
+    <div className="max-w-screen-md mx-auto mt-8 px-4 sm:px-6 lg:px-8">
+      <p className="text-2xl font-bold mb-4">Total WishList: {wishData.length}</p>
 
       <div className="overflow-x-auto">
-        <table className="table text-xl">
+        <table className="min-w-full">
           <thead>
-            <tr className="text-xl font-semi-bold">
-              <th>#</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Action</th>
+            <tr className="text-left text-sm font-medium text-gray-500 uppercase tracking-wider bg-gray-50">
+              <th className="px-2 sm:px-4 py-3">No.</th>
+              <th className="px-2 sm:px-4 py-3">Name</th>
+              <th className="px-2 sm:px-4 py-3">Price</th>
+              <th className="px-2 sm:px-4 py-3">Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white divide-y divide-gray-200">
             {wishData.map((wish, index) => (
               <tr key={wish._id}>
-                <th>{index + 1}</th>
-                <td>
+                <td className="px-2 sm:px-4 py-3 whitespace-nowrap">{index + 1}</td>
+                <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
                   <div className="flex items-center gap-3">
                     <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <img
-                          src={wish.img}
-                          alt="Avatar Tailwind CSS Component"
-                        />
+                      <div className="mask mask-squircle w-10 h-10 sm:w-12 sm:h-12">
+                        <img src={wish.img} alt="Product Image" />
                       </div>
                     </div>
-                    <div>
-                      <div className="font-semi-bold">{wish.name}</div>
-                    </div>
+                    <div className="font-semibold">{wish.name}</div>
                   </div>
                 </td>
-                <td className="font-semibold">{wish.price}</td>
+                <td className="px-2 sm:px-4 py-3 whitespace-nowrap font-semibold">${wish.price}</td>
                 <td
-                  className="btn bg-red-500 text-white"
+                  className="px-2 sm:px-4 py-3 whitespace-nowrap text-red-500 cursor-pointer"
                   onClick={() => handleDelete(wish._id, wish.name)}
                 >
                   Remove

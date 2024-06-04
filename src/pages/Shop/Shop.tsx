@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import ProductDetails from "./ProductDetails";
+import { Link } from "react-router-dom";
 
 const Shop = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const axiosPublic = useAxiosPublic();
   const [searchQuery, setSearchQuery] = useState("");
+  const axiosPublic = useAxiosPublic();
   const productsPerPage = 6;
 
   const { data: products = [] } = useQuery({
@@ -20,76 +22,49 @@ const Shop = () => {
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
 
-  // Filter products based on selected category or show all products
   const filteredProducts = selectedProduct
-    ? products
-        .filter((product) => product.category === selectedProduct)
-        .slice(indexOfFirstProduct, indexOfLastProduct)
-    : products.slice(indexOfFirstProduct, indexOfLastProduct);
+    ? products.filter((product) => product.category === selectedProduct)
+    : products;
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+  const searchedProducts = searchQuery
+    ? filteredProducts.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : filteredProducts;
 
+  const currentProducts = searchedProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
-const searchedProducts = searchQuery
-  ? filteredProducts.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  : filteredProducts;
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
-    const currentProducts = searchedProducts.slice(
-      indexOfFirstProduct,
-      indexOfLastProduct
-    );
   const handleOptionChange = (e) => {
     setSelectedProduct(
       e.target.value === "allProducts" ? null : e.target.value
     );
   };
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+    setCurrentPage(1);
   };
+
   return (
     <>
-      <div
-        className="bg-cover bg-center w-full mt-8 h-44 flex justify-center items-center"
-        style={{
-          backgroundImage:
-            'url("https://i.ibb.co/cvFhWC0/cart-page-header-img.jpg")',
-          opacity: "0.7",
-          backgroundColor: "black",
-        }}
-      >
+      <div className="bg-cover bg-center w-full mt-8 h-44 flex justify-center items-center" style={{backgroundImage: 'url("https://i.ibb.co/cvFhWC0/cart-page-header-img.jpg")', opacity: "0.7", backgroundColor: "black"}}>
         <h1 className="text-white text-4xl font-bold">Welcome to our Shop</h1>
       </div>
       <div className="flex max-w-screen-2xl mx-auto items-center justify-between">
         <div className="relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            onChange={handleSearchChange}
-            className="border rounded-md px-4 py-2 w-full pr-10"
-          />
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"></div>
         </div>
-
-        <div className="mr-2">
-          <select
-            className="border rounded-md px-4 py-2 w-full mt-4"
-            onChange={handleOptionChange}
-          >
-            <option value="allProducts">All Products</option>
-            <option value="Vegetable">Vegetable</option>
-            <option value="Fruits">F ruit</option>
-            <option value="meat">Meat</option>
-          </select>
-        </div>
+        <div className="mr-2"></div>
       </div>
-
-      <div className="grid max-w-screen-2xl mx-auto grid-cols-5 mt-6">
-        <div className="col-span-1 category">
+      <div className="grid max-w-screen-2xl mx-auto grid-cols-1 md:grid-cols-5 mt-6">
+        <div className="col-span-1 md:col-span-1 category">
           <h1 className="text-xl font-serif font-semibold mb-5">Categories</h1>
-          <div className="flex items-center">
+          <div className="flex md:flex-row items-center">
             <input
               type="radio"
               name="food"
@@ -106,7 +81,7 @@ const searchedProducts = searchQuery
               All Products
             </label>
           </div>
-          <div className="flex items-center">
+          <div className="flex md:flex-row items-center">
             <input
               type="radio"
               name="food"
@@ -123,7 +98,7 @@ const searchedProducts = searchQuery
               Vegetable
             </label>
           </div>
-          <div className="flex items-center">
+          <div className="flex  md:flex-row items-center">
             <input
               type="radio"
               name="food"
@@ -140,7 +115,7 @@ const searchedProducts = searchQuery
               Fruit
             </label>
           </div>
-          <div className="flex items-center">
+          <div className="flex  md:flex-row items-center">
             <input
               type="radio"
               name="food"
@@ -158,13 +133,19 @@ const searchedProducts = searchQuery
             </label>
           </div>
         </div>
-
-        <div className="col-span-4">
-          <div className="grid grid-cols-3 gap-y-5">
+        <div className="col-span-1 md:col-span-4">
+          <input
+            type="search"
+            placeholder="Search..."
+            onChange={handleSearchChange}
+            value={searchQuery}
+            className="border border-green-500 rounded-md px-4 py-2 w-full md:w-9/12 my-3  pr-10"
+          />
+          <div className="grid grid-cols-1 mx-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-2">
             {currentProducts.map((product) => (
               <div
                 key={product._id}
-                className="card bg-transparent-glass w-5/6 h-96 hover:shadow-gray-500 shadow-2xl bg-base-100 col-span-1 bg-opacity-75"
+                className="card bg-transparent-glass w-full h-96 hover:shadow-gray-500 shadow-2xl bg-base-100 bg-opacity-75"
               >
                 <figure>
                   <img
@@ -177,9 +158,12 @@ const searchedProducts = searchQuery
                   <h2 className="card-title">{product.name}</h2>
                   <p className="font-bold">${product.price}/kg</p>
                   <div className="card-actions justify-end">
-                    <button className="btn text-xl bg-sky-500 text-white font-bold">
+                    <Link
+                      to={`/product/${product._id}`}
+                      className="btn text-xl bg-sky-500 text-white font-bold"
+                    >
                       see details
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -187,7 +171,6 @@ const searchedProducts = searchQuery
           </div>
         </div>
       </div>
-
       <div className="pagination flex justify-center my-4">
         <button
           className="mx-2 px-3 py-1 bg-purple-600 font-semibold text-white rounded"

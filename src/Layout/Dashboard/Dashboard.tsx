@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
       </aside>
 
       <main className="flex-1 p-6">
-        <h1 className="text-2xl font-bold mb-7 text-white bg-cyan-500 py-3 w-1/5 text-center rounded-lg mx-auto">Welcome to Dashboard</h1>
+        <h1 className="sm:w-1/2 text-2xl font-bold mb-7 text-white bg-cyan-500 py-3 md:w-1/3 text-center rounded-lg mx-auto">Welcome to Dashboard</h1>
         
         <Outlet />
       </main>

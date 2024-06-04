@@ -22,6 +22,7 @@ import AddReview from "../Layout/Dashboard/AddReview/AddReview";
 import AllProducts from "../pages/Home/AllProducts/AllProducts";
 import WishList from "../Layout/Dashboard/WishList/WishList";
 import Shop from "../pages/Shop/Shop";
+import ProductDetails from "../pages/Shop/ProductDetails";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,25 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "/product/:id",
+        element: <ProductDetails />,
+        loader: async ({ params }) => {
+          try {
+            const res = await fetch(
+              `http://localhost:5000/all-products/${params.id}`
+            );
+            if (res.ok) {
+              const data = await res.json();
+              return data;
+            }
+          } catch (error) {
+            console.error("Error fetching product data:", error);
+          }
+          return null; 
+        },
+      },
+
       {
         path: "/login",
         element: <Login></Login>,

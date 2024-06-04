@@ -39,29 +39,20 @@ const Testimonial = () => {
     speed: 500,
     autoplay: true,
     autoplaySpeed: 3000,
-    slidesToShow: 2, 
+    slidesToShow: 1, // Show one slide at a time on mobile
     slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1, 
-          slidesToScroll: 1,
-        },
-      },
-    ],
   };
 
   return (
-    <div className="bg-gray-50 py-12">
+    <div className="bg-gray-50 mt-5 py-12">
       <div className="text-center">
-        <h1 className="text-green-500 text-xl font-serif mt-16 sm:mt-24">Our Testimonial</h1>
+        <h1 className="text-xl font-serif mt-8 sm:mt-24 sm:mb-5 bg-cyan-500 text-white py-3 rounded-lg w-fit px-4 mx-auto">Our Testimonial</h1>
         <h1 className="font-bold text-gray-600 text-3xl sm:text-5xl mt-2 mb-8 sm:mb-12">Our Clients Say!</h1>
       </div>
-      <div className="max-w-4xl mx-auto px-4">
+      <div className="max-w-xl mx-auto px-4"> {/* Adjusted max-width for better mobile experience */}
         <Slider {...settings}>
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-white shadow-md rounded-lg p-6 mx-2">
+            <div key={index} className="bg-white shadow-md rounded-lg p-6">
               <div className="flex gap items-center mb-4">
                 {[...Array(5)].map((_, i) => (
                   <FaStar

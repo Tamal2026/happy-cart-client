@@ -68,7 +68,7 @@ const Navbar = () => {
               <li>
                 {user ? (
                   <>
-                    Login <BiRightArrow></BiRightArrow>
+                     <BiRightArrow></BiRightArrow>
                     <button
                       onClick={handleLogOut}
                       className="btn btn-outline btn-warning"

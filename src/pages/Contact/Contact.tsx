@@ -1,20 +1,11 @@
 import { FaLocationDot, FaPhone } from "react-icons/fa6";
 import { MdOutgoingMail } from "react-icons/md";
-import L from "leaflet";
+
 import "leaflet/dist/leaflet.css";
-import { useEffect, useRef } from "react";
+
 
 const Contact = () => {
-  const mapRef = useRef(null);
 
-  useEffect(() => {
-    if (!mapRef.current) {
-      mapRef.current = L.map("map").setView([40.7128, -74.006], 13); // New York coordinates
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-        mapRef.current
-      );
-    }
-  }, []);
 
   return (
     <section className="my-7">
@@ -22,21 +13,17 @@ const Contact = () => {
         Contact With us
       </h1>
 
-      <div className="bg-slate-100 h-[1000px] mx-auto rounded-lg w-[1200px]">
+      <div className="bg-slate-100 h-[500px] mx-auto rounded-lg w-[1000px]">
         <h1 className="text-green-400 font-semibold text-3xl text-center py-5">
           Get in Touch
         </h1>
-        <h1 className="text-center">
+        <h1 className="text-center mb-5">
           Connect with Happy Cart to share your thoughts, inquiries, or
           suggestions. <br /> Our contact page provides an easy way to reach us.
           Feel free to send us a message, and we'll promptly respond to your
-          queries. <br /> Whether you have questions about our products, orders,
-          or anything else, we're here to+ help!
+          queries.
         </h1>
-        <div
-          id="map"
-          className="h-96 my-10 flex mx-auto items-center w-[800px]"
-        ></div>
+       
         <div className="flex justify-between">
           <form>
             <input

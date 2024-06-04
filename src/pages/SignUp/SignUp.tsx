@@ -23,10 +23,11 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+   
     createUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;
-      console.log(loggedUser);
+      console.log(loggedUser)
+   
       updateUserProfile(data.name)
         .then(() => {
           const userInfo = {
@@ -60,43 +61,42 @@ axiosPublic.post('/users',userInfo)
 
   return (
     <div>
-      <div className="hero min-h-screen bg-base-200">
+      <div className="hero min-h-screen bg-cover" style={{ backgroundImage: 'url("https://i.ibb.co/Fgbmghk/bgg.png")' }}>
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold">Sign Up</h1>
-            <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p>
+            
+           
           </div>
           <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">
               <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-bold">Name</span>
-                </label>
+                <h1 className="text-xl font-semibold text-green-500 mb-4">Sign Up</h1>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-bold">Name</span>
+                  </label>
 
-                <input
-                  type="text"
-                  {...register("name")}
-                  name="name"
-                  placeholder="Enter your name"
-                  className="input input-bordered"
-                  required
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Email</span>
-                </label>
-                <input
-                  type="email"
-                  {...register("email")}
-                  placeholder="email"
-                  className="input input-bordered"
-                  required
-                />
+                  <input
+                    type="text"
+                    {...register("name")}
+                    name="name"
+                    placeholder="Enter your name"
+                    className="input input-bordered"
+                    required
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Email</span>
+                  </label>
+                  <input
+                    type="email"
+                    {...register("email")}
+                    placeholder="email"
+                    className="input input-bordered"
+                    required
+                  />
+                </div>
               </div>
               <div className="form-control">
                 <label className="label">
@@ -130,17 +130,13 @@ axiosPublic.post('/users',userInfo)
                     character
                   </span>
                 )}
-                <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
-                    Forgot password?
-                  </a>
-                </label>
+              
               </div>
               <div className="form-control mt-6">
                 <input
                   type="submit"
                   className="btn btn-primary bg-blue-400 text-white font-bold"
-                  value="Login"
+                  value="Sign Up"
                 />
               </div>
               <div>

@@ -15,29 +15,27 @@ const PaymentHistory = () => {
   });
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold">
-        Total Payments: {payments.length}
-      </h1>
+    <div className="max-w-screen-md mx-auto mt-8 px-4 sm:px-6 lg:px-8">
+      <h1 className="text-2xl font-semibold mb-4">Total Payments: {payments.length}</h1>
 
       {payments.length === 0 ? (
-        <p className="mt-5 font-semibold text-xl text-sky-600">Sorry you naver buy anything from us :(</p>
+        <p className="text-xl font-semibold text-sky-600 text-center">Sorry, you haven't made any purchases yet.</p>
       ) : (
-        <div className="overflow-x-auto w-3/4">
-          <table className="table table-zebra-zebra">
+        <div className="overflow-x-auto">
+          <table className="min-w-full">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Price</th>
-                <th>Transaction Id</th>
+                <th className="px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">No.</th>
+                <th className="px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                <th className="px-4 py-3 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Transaction Id</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {payments.map((payment, index) => (
                 <tr key={payment._id}>
-                  <th>{index + 1}</th>
-                  <td>$ {payment.price}</td>
-                  <td>{payment.transactionId}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">$ {payment.price}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{payment.transactionId}</td>
                 </tr>
               ))}
             </tbody>

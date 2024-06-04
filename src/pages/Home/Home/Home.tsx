@@ -10,15 +10,16 @@ import Testimonial from "./Testimonial/Testimonial";
 const Home = () => {
   return (
     <>
-      <Hero></Hero>
-
-      <AllProducts></AllProducts>
-      <FreshFruitBanner></FreshFruitBanner>
-      <BestSellerProducts></BestSellerProducts>
-      <CustomerSatisfiedSection></CustomerSatisfiedSection>
-      <Testimonial></Testimonial>
-      <FAQ></FAQ>
-      <Features></Features>
+      <Hero />
+      <AllProducts />
+      <FreshFruitBanner />
+      <BestSellerProducts />
+      <CustomerSatisfiedSection />
+      <Testimonial />
+      <FAQ />
+      <div className="hidden md:block">
+        <Features />
+      </div>
     </>
   );
 };
