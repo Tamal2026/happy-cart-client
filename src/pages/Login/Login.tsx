@@ -59,8 +59,8 @@ const Login = () => {
             </div>
           </form>
           <div className="flex justify-center items-center mx-auto lg:justify-start mt-4">
-            <button className="btn bg-green-500 text-white mr-4" onClick={(e) => handleLogin(e, "user@example.com", "password123")}>User Demo</button>
-            <button className="btn btn-secondary" onClick={(e) => handleLogin(e, "admin@gg.com", "12345T@t")}>Admin Demo</button>
+            <button className="btn bg-green-500 text-white mr-4" onClick={(e) => handleLogin(e, "user@gmail.com", "User123@")}>User Demo</button>
+            <button className="btn btn-secondary" onClick={(e) => handleLogin(e, "MrAdmin@gmail.gg", "Admin123@")}>Admin Demo</button>
           </div>
           <div className="mt-4 text-center">
             <h1>

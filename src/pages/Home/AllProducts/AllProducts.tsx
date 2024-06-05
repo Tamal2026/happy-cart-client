@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FaCartPlus, FaRegPlusSquare } from "react-icons/fa";
 import { AuthContext } from "../../../providers/AuthProvider";
-import { useLocation, useNavigate } from "react-router-dom";
+
 import Swal from "sweetalert2";
 import Modal from "react-modal";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -18,19 +18,19 @@ interface Product {
   email: string;
   short_desc: string;
   ItemId: string;
-  quantity:number;
+  quantity: number;
 }
 
 const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
   const [quantity, setQuantity] = useState<number>(1);
 
   const incrementQuantity = () => {
-    setQuantity(prevQuantity => prevQuantity + 1);
+    setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
   const decrementQuantity = () => {
     if (quantity > 1) {
-      setQuantity(prevQuantity => prevQuantity - 1);
+      setQuantity((prevQuantity) => prevQuantity - 1);
     }
   };
 
@@ -42,10 +42,10 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
       className="fixed inset-0 flex items-center justify-center z-50"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
     >
-      <div className="bg-white rounded-lg shadow-lg w-full sm:w-96 p-6">
+      <div className="bg-white rounded-lg shadow-lg w-full sm:w-96  p-6">
         <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
         <img
-          className="h-60 w-full mb-4 object-cover"
+          className="h-56 w-full mb-4 object-cover"
           src={product.img}
           alt=""
         />
@@ -56,10 +56,7 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
           <label className="block mb-1 font-semibold">
             Quantity:
             <div className="flex items-center mt-2">
-              <button
-                className="btn btn-sm mr-2"
-                onClick={decrementQuantity}
-              >
+              <button className="btn btn-sm mr-2" onClick={decrementQuantity}>
                 -
               </button>
               <input
@@ -68,10 +65,7 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
                 onChange={(e) => setQuantity(Number(e.target.value))}
                 className="border rounded px-2 py-1 w-16 text-center"
               />
-              <button
-                className="btn btn-sm ml-2"
-                onClick={incrementQuantity}
-              >
+              <button className="btn btn-sm ml-2" onClick={incrementQuantity}>
                 +
               </button>
             </div>
@@ -101,8 +95,6 @@ const AllProducts = () => {
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
   const [isAdmin] = useAdmin();
-  const navigate = useNavigate();
-  const location = useLocation();
   const { user } = useContext(AuthContext);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -125,14 +117,19 @@ const AllProducts = () => {
   const handleAddToCart = (product: Product, quantity) => {
     if (user && user.email) {
       const cartItem = {
+        itemId: product._id,
+        email: user.email,
         name: product.name,
-        // Add other necessary properties from the product object
+        img: product.img,
+        price: product.price,
+        quantity: quantity,
       };
-  
-      axiosSecure.post("/cart", cartItem)
+
+      axiosSecure
+        .post("/cart", cartItem)
         .then((res) => {
           if (res.data.insertedId) {
-            // Product added to cart successfully
+            console.log(res.data)
             Swal.fire({
               position: "center",
               icon: "success",
@@ -140,10 +137,9 @@ const AllProducts = () => {
               showConfirmButton: false,
               timer: 1500,
             });
-            refetch(); // Update cart or UI
-            handleCloseModal(); // Close modal or do any necessary action
+            refetch();
+            
           } else {
-            // Product is already in the cart
             Swal.fire({
               position: "top-end",
               icon: "error",
@@ -152,17 +148,15 @@ const AllProducts = () => {
               timer: 1500,
             });
           }
+          handleCloseModal();
         })
         .catch((error) => {
           console.error("Error adding product to cart:", error);
-          // Handle error, show error message to the user, etc.
         });
     } else {
-      // User is not logged in, handle this case accordingly
+      // Handle case when user is not logged in
     }
   };
-  
-   
 
   const handleWishList = (product: Product) => {
     if (user && user.email) {
@@ -197,7 +191,6 @@ const AllProducts = () => {
         })
         .catch((error) => {
           console.error("Error adding product to wishlist", error);
-       
         });
     }
   };

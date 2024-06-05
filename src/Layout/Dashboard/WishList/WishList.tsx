@@ -16,7 +16,7 @@ const WishList = () => {
     },
   });
 
-  const handleDelete = (productId, productName) => {
+  const handleDelete = (productId:string, productName:string) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -56,7 +56,7 @@ const WishList = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {wishData.map((wish, index) => (
+            {wishData.map((wish, index:number) => (
               <tr key={wish._id}>
                 <td className="px-2 sm:px-4 py-3 whitespace-nowrap">{index + 1}</td>
                 <td className="px-2 sm:px-4 py-3 whitespace-nowrap">

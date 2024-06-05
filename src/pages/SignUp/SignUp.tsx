@@ -23,6 +23,7 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data)
    
     createUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;

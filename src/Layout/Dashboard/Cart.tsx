@@ -11,15 +11,15 @@ const Cart = () => {
   const [quantities, setQuantities] = useState([]);
 
   useEffect(() => {
-    setQuantities(cart.map((item) => item.quantity || 1));
+    setQuantities(cart.map((item:number) => item.quantity || 1));
   }, [cart]);
 
   const totalPrice = cart.reduce(
-    (total, item, index) => total + item.price * quantities[index],
+    (total:number, item:number, index:number) => total + item.price * quantities[index],
     0
   );
 
-  const handleIncrease = (index) => {
+  const handleIncrease = (index:number) => {
     setQuantities((prevQuantities) => {
       const newQuantities = [...prevQuantities];
       newQuantities[index] += 1;
@@ -37,7 +37,7 @@ const Cart = () => {
     });
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id:number) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -52,7 +52,7 @@ const Cart = () => {
           if (res.data.deletedCount > 0) {
             Swal.fire({
               title: "Deleted!",
-              text: "Your file has been deleted.",
+              text: `this product has been deleted.`,
               icon: "success",
             });
             refetchCart();
@@ -66,21 +66,25 @@ const Cart = () => {
     <div className="max-w-screen-xl mx-auto mb-10 px-4 sm:px-6 lg:px-8">
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <div className="px-4 py-3 flex flex-col sm:flex-row justify-between border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-800 mb-2 sm:mb-0">Your Cart</h2>
-          <h2 className="text-xl font-semibold text-gray-800">Total items: {cart.length}</h2>
+          <div className="w-full sm:w-1/3">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2 sm:mb-0">Your Cart</h2>
+            <h2 className="text-xl font-semibold text-gray-800">Total items: {cart.length}</h2>
+          </div>
         </div>
         <div className="px-4 py-3">
+          {/* Cart Items */}
           {cart.length === 0 ? (
             <div className="text-center text-xl py-4 text-gray-600">
               Your cart is empty.
             </div>
           ) : (
-            cart.map((item, index) => (
+            cart.map((item, index:number) => (
               <div
                 key={item._id}
                 className="flex flex-col sm:flex-row items-center justify-between py-3 border-b border-gray-200"
               >
-                <div className="flex items-center gap-3 mb-2 sm:mb-0">
+                {/* Cart Item Details */}
+                <div className="w-full sm:w-1/3 flex items-center gap-3 mb-2 sm:mb-0">
                   <div className="font-bold text-lg">{index + 1}.</div>
                   <div className="avatar">
                     <div className="mask mask-squircle w-12 h-12">
@@ -92,22 +96,24 @@ const Cart = () => {
                     <div className="text-sm opacity-50">{item.short_desc}</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                {/* Quantity Control */}
+                <div className="w-full sm:w-1/3 flex items-center gap-4">
                   <button
-                    className="rounded-xl bg-red-500 btn-sm text-center font-bold  text-white text-xl"
+                    className="rounded-xl bg-red-500 btn-sm text-center font-bold text-white text-xl"
                     onClick={() => handleDecrease(index)}
                   >
                     -
                   </button>
                   <div className="text-xl font-semibold">{quantities[index]}</div>
                   <button
-                    className="rounded-xl bg-blue-500 btn-sm text-center font-bold  text-white text-xl"
+                    className="rounded-xl bg-blue-500 btn-sm text-center font-bold text-white text-xl"
                     onClick={() => handleIncrease(index)}
                   >
                     +
                   </button>
                 </div>
-                <div className="text-right mt-2 sm:mt-0">
+                {/* Price and Delete */}
+                <div className="w-full sm:w-1/3 text-right mt-2 sm:mt-0">
                   <div className="font-bold text-lg">${(item.price * quantities[index]).toFixed(2)}</div>
                   <button
                     onClick={() => handleDelete(item._id)}
@@ -121,14 +127,16 @@ const Cart = () => {
           )}
         </div>
         <div className="px-4 py-3 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center">
-          {cart.length ? (
-            <Link to="/dashboard/payment">
-              <button className="btn bg-sky-600 text-white text-xl mb-2 sm:mb-0 w-full sm:w-auto">Pay</button>
-            </Link>
-          ) : (
-            <button disabled className="btn bg-sky-600 text-white text-xl mb-2 sm:mb-0 w-full sm:w-auto">Pay</button>
-          )}
-          <div className="text-lg font-semibold mb-2 sm:mb-0">Total Price: ${totalPrice.toFixed(2)}</div>
+          <div className="w-full sm:w-1/3">
+            {cart.length ? (
+              <Link to="/dashboard/payment">
+                <button className="btn bg-sky-600 text-white text-xl mb-2 sm:mb-0 w-full sm:w-auto">Pay</button>
+              </Link>
+            ) : (
+              <button disabled className="btn bg-sky-600 text-white text-xl mb-2 sm:mb-0 w-full sm:w-auto">Pay</button>
+            )}
+          </div>
+          <div className="w-full sm:w-1/3 text-lg font-semibold mb-2 sm:mb-0">Total Price: ${totalPrice.toFixed(2)}</div>
         </div>
       </div>
     </div>

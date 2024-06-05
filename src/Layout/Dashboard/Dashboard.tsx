@@ -1,72 +1,188 @@
-import React from "react";
-
-import { Link, NavLink, Outlet } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
+import { FaBars } from "react-icons/fa6";
 
 const Dashboard: React.FC = () => {
   const [isAdmin] = useAdmin();
+  const [showOptions, setShowOptions] = useState(false);
+  const location = useLocation();
+
+  const toggleOptions = () => {
+    setShowOptions(!showOptions);
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path ? "bg-blue-700 text-white rounded-lg " : "";
+  };
+
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <aside className="w-64 bg-blue-900 text-white">
+    <div className="flex min-h-screen  bg-gray-100">
+      <aside className="w-64 bg-blue-900 mb-3 text-white md:block hidden">
         <div className="p-6">
           <h2 className="text-3xl font-bold">Dashboard</h2>
         </div>
         {isAdmin ? (
-          <ul className="mt-6">
-            <NavLink to="/dashboard/adminOverview">
-              <li className="px-6 py-2 hover:bg-blue-700">
-                <h1>Overview</h1>
-              </li>
-            </NavLink>
-            <NavLink to="/dashboard/manageProducts">
-              <li className="px-6 py-2 hover:bg-blue-700">
-                <h1>Mange Products</h1>
-              </li>
-            </NavLink>
-            <NavLink to="/dashboard/addProduct">
-              <li className="px-6 py-2 hover:bg-blue-700">
-                <h1>Add Product</h1>
-              </li>
-            </NavLink>
-            <NavLink to="/dashboard/allusers">
-              <li className="px-6 py-2 hover:bg-blue-700">
-                <h1>All Users</h1>
-              </li>
-            </NavLink>
-
-            <hr className="my-4 border-gray-600" />
+          <ul>
+            <li>
+              <NavLink
+                to="/dashboard/adminOverview"
+                className={`block px-6 py-2  ${isActive("/dashboard/adminOverview")}`}
+              >
+                Overview
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/manageProducts"
+                className={`block px-6 py-2  ${isActive("/dashboard/manageProducts")}`}
+              >
+                Manage Products
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/addProduct"
+                className={`block px-6 py-2  ${isActive("/dashboard/addProduct")}`}
+              >
+                Add Product
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/allusers"
+                className={`block px-6 py-2  ${isActive("/dashboard/allusers")}`}
+              >
+                All Users
+              </NavLink>
+            </li>
           </ul>
         ) : (
-          <ul className="mt-6">
-            <Link to="/dashboard/UserOverview">
-              <li className="px-6 py-2 hover:bg-blue-700">Overview</li>
-            </Link>
-            <NavLink to="/dashboard/paymentHistory">
-              <li className="px-6 py-2 hover:bg-blue-700">
-                <h1>Payment History</h1>
-              </li>
-            </NavLink>
-
-            <NavLink to="/dashboard/wishlist">
-              <li className="px-6 py-2 hover:bg-blue-700">WishList</li>
-            </NavLink>
-
-            <hr className="my-4 border-gray-600" />
+          <ul>
+            <li>
+              <NavLink
+                to="/dashboard/UserOverview"
+                className={`block px-6 py-2  ${isActive("/dashboard/UserOverview")}`}
+              >
+                Overview
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/paymentHistory"
+                className={`block px-6 py-2   ${isActive("/dashboard/paymentHistory")}`}
+              >
+                Payment History
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/wishlist"
+                className={`block px-6 py-2  ${isActive("/dashboard/wishlist")}`}
+              >
+                Wishlist
+              </NavLink>
+            </li>
           </ul>
         )}
-
-        <ul>
-          <Link to="/">
-            <li className="px-6 py-2 hover:bg-blue-700">
-              <h1>Back to Home</h1>
-            </li>
+        <hr className="my-5" />
+        <div className="mt-4">
+          <Link
+            to="/"
+            className="block px-6 py-2 "
+          >
+            Back to Home
           </Link>
-        </ul>
+        </div>
       </aside>
 
       <main className="flex-1 p-6">
-        <h1 className="sm:w-1/2 text-2xl font-bold mb-7 text-white bg-cyan-500 py-3 md:w-1/3 text-center rounded-lg mx-auto">Welcome to Dashboard</h1>
-        
+        <div className="md:hidden">
+          <button
+            onClick={toggleOptions}
+            className="block px-4 mb-3 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded-lg"
+          >
+          <FaBars />
+          </button>
+          {showOptions && (
+            <div className="mt-2">
+              <ul>
+                {isAdmin ? (
+                  <>
+                    <li>
+                      <NavLink
+                        to="/dashboard/adminOverview"
+                        className={`block px-6 py-2  ${isActive("/dashboard/adminOverview")}`}
+                      >
+                        Overview
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/dashboard/manageProducts"
+                        className={`block px-6 py-2  ${isActive("/dashboard/manageProducts")}`}
+                      >
+                        Manage Products
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/dashboard/addProduct"
+                        className={`block px-6 py-2  ${isActive("/dashboard/addProduct")}`}
+                      >
+                        Add Product
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/dashboard/allusers"
+                        className={`block px-6 py-2  ${isActive("/dashboard/allusers")}`}
+                      >
+                        All Users
+                      </NavLink>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      <NavLink
+                        to="/dashboard/UserOverview"
+                        className={`block px-6 py-2  ${isActive("/dashboard/UserOverview")}`}
+                      >
+                        Overview
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/dashboard/paymentHistory"
+                        className={`block px-6 py-2  ${isActive("/dashboard/paymentHistory")}`}
+                      >
+                        Payment History
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/dashboard/wishlist"
+                        className={`block px-6 py-2  ${isActive("/dashboard/wishlist")}`}
+                      >
+                        Wishlist
+                      </NavLink>
+                    </li>
+                  </>
+                )}
+              </ul>
+              <div className="mt-4">
+                <Link
+                  to="/"
+                  className="block px-6 py-2 "
+                >
+                  Back to Home
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+        <h1 className="text-2xl font-bold mb-7 text-white bg-cyan-500 py-3 md:w-1/2 lg:w-1/3 text-center rounded-lg mx-auto">Welcome to Dashboard</h1>
         <Outlet />
       </main>
     </div>
