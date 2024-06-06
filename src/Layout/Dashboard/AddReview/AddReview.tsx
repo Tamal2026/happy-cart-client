@@ -18,13 +18,14 @@ const AddReview = () => {
   const handleRatingChange = (newRating) => {
     setRating(newRating);
   };
-
   const reviewData = {
-    name: user.displayName,
-    email: user.email,
+    name: user ? user.displayName || 'Anonymous' : 'Anonymous',
+    email: user ? user.email || '' : '',
     reviewText: reviewText,
     rating: rating,
   };
+  
+  
 
   const handleSubmit = async () => {
     const res = await axiosPublic.post("/reviews", reviewData);

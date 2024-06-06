@@ -10,7 +10,7 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/all-products/${id}`
+          `https://happy-cart-server.vercel.app/all-products/${id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch product");

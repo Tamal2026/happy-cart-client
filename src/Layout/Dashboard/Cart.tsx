@@ -5,21 +5,31 @@ import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
+// Define the type for an item in the cart
+interface CartItem {
+  _id: string;
+  name: string;
+  img: string;
+  short_desc: string;
+  price: number;
+  quantity: number;
+}
+
 const Cart = () => {
   const axiosSecure = useAxiosSecure();
-  const [cart, refetchCart] = useCart();
-  const [quantities, setQuantities] = useState([]);
+  const [cart, refetchCart] = useCart<CartItem>();
+  const [quantities, setQuantities] = useState<number[]>([]);
 
   useEffect(() => {
-    setQuantities(cart.map((item:number) => item.quantity || 1));
+    setQuantities(cart.map((item: CartItem) => item.quantity || 1));
   }, [cart]);
 
   const totalPrice = cart.reduce(
-    (total:number, item:number, index:number) => total + item.price * quantities[index],
+    (total: number, item: CartItem, index: number) => total + item.price * quantities[index],
     0
   );
 
-  const handleIncrease = (index:number) => {
+  const handleIncrease = (index: number) => {
     setQuantities((prevQuantities) => {
       const newQuantities = [...prevQuantities];
       newQuantities[index] += 1;
@@ -27,7 +37,7 @@ const Cart = () => {
     });
   };
 
-  const handleDecrease = (index) => {
+  const handleDecrease = (index: number) => {
     setQuantities((prevQuantities) => {
       const newQuantities = [...prevQuantities];
       if (newQuantities[index] > 1) {
@@ -37,7 +47,7 @@ const Cart = () => {
     });
   };
 
-  const handleDelete = (id:number) => {
+  const handleDelete = (id: string) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -45,14 +55,14 @@ const Cart = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, Remove!",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/cart/${id}`).then((res) => {
           if (res.data.deletedCount > 0) {
             Swal.fire({
-              title: "Deleted!",
-              text: `this product has been deleted.`,
+              title: "Removed!",
+              text: `Product has been removed from cart.`,
               icon: "success",
             });
             refetchCart();
@@ -72,18 +82,14 @@ const Cart = () => {
           </div>
         </div>
         <div className="px-4 py-3">
-          {/* Cart Items */}
           {cart.length === 0 ? (
-            <div className="text-center text-xl py-4 text-gray-600">
-              Your cart is empty.
-            </div>
+            <div className="text-center text-xl py-4 text-gray-600">Your cart is empty.</div>
           ) : (
-            cart.map((item, index:number) => (
+            cart.map((item:CartItem, index: number) => (
               <div
                 key={item._id}
                 className="flex flex-col sm:flex-row items-center justify-between py-3 border-b border-gray-200"
               >
-                {/* Cart Item Details */}
                 <div className="w-full sm:w-1/3 flex items-center gap-3 mb-2 sm:mb-0">
                   <div className="font-bold text-lg">{index + 1}.</div>
                   <div className="avatar">
@@ -96,7 +102,6 @@ const Cart = () => {
                     <div className="text-sm opacity-50">{item.short_desc}</div>
                   </div>
                 </div>
-                {/* Quantity Control */}
                 <div className="w-full sm:w-1/3 flex items-center gap-4">
                   <button
                     className="rounded-xl bg-red-500 btn-sm text-center font-bold text-white text-xl"
@@ -104,7 +109,7 @@ const Cart = () => {
                   >
                     -
                   </button>
-                  <div className="text-xl font-semibold">{quantities[index]}</div>
+                  <div className="text-xl font-semibold">{quantities[index]}kg</div>
                   <button
                     className="rounded-xl bg-blue-500 btn-sm text-center font-bold text-white text-xl"
                     onClick={() => handleIncrease(index)}
@@ -112,7 +117,6 @@ const Cart = () => {
                     +
                   </button>
                 </div>
-                {/* Price and Delete */}
                 <div className="w-full sm:w-1/3 text-right mt-2 sm:mt-0">
                   <div className="font-bold text-lg">${(item.price * quantities[index]).toFixed(2)}</div>
                   <button

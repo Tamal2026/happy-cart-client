@@ -93,7 +93,7 @@ const AdminOverview = () => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="category" />
-            <YAxis />
+            <YAxis className="sm:w-1/3" />
             <Bar
               dataKey="quantity"
               fill="#8884d8"

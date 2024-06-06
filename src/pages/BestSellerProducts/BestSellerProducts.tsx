@@ -24,7 +24,7 @@ const BestSellerProducts = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/best-seller-products")
+    fetch("https://happy-cart-server.vercel.app/best-seller-products")
       .then((res) => res.json())
       .then((data) => {
         setBestSellerProducts(data);

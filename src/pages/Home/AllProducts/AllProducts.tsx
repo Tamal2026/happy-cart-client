@@ -8,6 +8,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import useAdmin from "../../../hooks/useAdmin";
+import { useNavigate } from "react-router-dom";
 
 interface Product {
   name: string;
@@ -92,6 +93,7 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
 
 const AllProducts = () => {
   const [, refetch] = useCart();
+  const navigate = useNavigate()
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
   const [isAdmin] = useAdmin();
@@ -124,7 +126,7 @@ const AllProducts = () => {
         price: product.price,
         quantity: quantity,
       };
-
+  
       axiosSecure
         .post("/cart", cartItem)
         .then((res) => {
@@ -154,7 +156,20 @@ const AllProducts = () => {
           console.error("Error adding product to cart:", error);
         });
     } else {
-      // Handle case when user is not logged in
+      Swal.fire({
+        title: "You're not logged in",
+        text: "Please log in to add items to your cart.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Login",
+        cancelButtonText: "Cancel"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/login'); // Redirect the user to the login page
+        }
+      });
     }
   };
 
@@ -196,7 +211,7 @@ const AllProducts = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/all-products")
+    fetch("https://happy-cart-server.vercel.app/all-products")
       .then((res) => res.json())
       .then((data) => {
         setAllProducts(data);

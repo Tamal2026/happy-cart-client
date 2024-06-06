@@ -62,7 +62,7 @@ axiosPublic.post('/users',userInfo)
 
   return (
     <div>
-      <div className="hero min-h-screen bg-cover" style={{ backgroundImage: 'url("https://i.ibb.co/Fgbmghk/bgg.png")' }}>
+      <div className="hero min-h-screen bg-cover" style={{ backgroundImage: 'url("https://i.ibb.co/pQ1fM6J/gg-g.jpg")' }}>
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
             

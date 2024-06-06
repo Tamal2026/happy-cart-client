@@ -8,7 +8,7 @@ import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import Dashboard from "../Layout/Dashboard/Dashboard";
 import PurchasedHistory from "../Layout/Dashboard/PurchasedHistory";
 import Cart from "../Layout/Dashboard/Cart";
-import Checkout from "../pages/Checkout/Checkout";
+
 import AllUser from "../Layout/Dashboard/AllUser";
 import AddProduct from "../Layout/Dashboard/AddProduct";
 import AdminRoutes from "./AdminRoutes";
@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
         loader: async ({ params }) => {
           try {
             const res = await fetch(
-              `http://localhost:5000/all-products/${params.id}`
+              `https://happy-cart-server.vercel.app/all-products/${params.id}`
             );
             if (res.ok) {
               const data = await res.json();
@@ -56,7 +56,7 @@ export const router = createBrowserRouter([
           } catch (error) {
             console.error("Error fetching product data:", error);
           }
-          return null; 
+          return null;
         },
       },
 
@@ -77,10 +77,6 @@ export const router = createBrowserRouter([
         element: <Cart></Cart>,
       },
 
-      {
-        path: "/checkout",
-        element: <Checkout></Checkout>,
-      },
       {
         path: "/shop",
         element: <Shop></Shop>,
@@ -160,7 +156,7 @@ export const router = createBrowserRouter([
           const fetchData = async () => {
             try {
               const res = await fetch(
-                `http://localhost:5000/all-products/${params.id}`
+                `https://happy-cart-server.vercel.app/all-products/${params.id}`
               );
               if (res.ok) {
                 const data = await res.json();

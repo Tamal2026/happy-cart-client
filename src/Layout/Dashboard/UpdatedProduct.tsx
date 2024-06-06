@@ -1,8 +1,24 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useLoaderData } from "react-router-dom";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+
+interface ProductData {
+  name: string;
+  category: string;
+  price: number;
+  short_desc: string;
+  img: string;
+  _id: string;
+}
+interface FormData {
+  name: string;
+  category: string;
+  price: number;
+  short_desc: string;
+  image: FileList;
+}
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -11,11 +27,13 @@ const UpdatedProduct = () => {
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
 
-  const { name, category, price, short_desc, img, _id } = useLoaderData();
+  // Explicitly typing the response of useLoaderData()
+  const { name, category, price, short_desc, img, _id } = useLoaderData() as ProductData;
+
 
   const { register, handleSubmit } = useForm();
 
-  const onSubmit = async (data) => {
+  const onSubmit :SubmitHandler<FormData> = async (data:FormData) => {
     const imageFile = { image: data.image[0] };
     const res = await axiosPublic.post(image_hosting_api, imageFile, {
       headers: {
@@ -30,7 +48,7 @@ const UpdatedProduct = () => {
         short_desc: data.short_desc,
         img: res.data.data.display_url,
       };
-    
+
       const ProductRes = await axiosSecure.patch(
         `/all-products/${_id}`,
         productData

@@ -1,5 +1,5 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
 import { AuthContext } from "../../../providers/AuthProvider";
@@ -7,11 +7,19 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import Modal from "react-modal";
 
+// Define the type for an item in the cart
+interface CartItem {
+  _id: string;
+  itemId: string;
+  price: number;
+  quantity: number;
+}
+
 const customStyles = {
   content: {
     top: "50%",
     left: "50%",
-    bottom:"30%",
+    bottom: "25%",
     transform: "translate(-50%, -50%)",
     borderRadius: "0.5rem",
     boxShadow: "0 4px 24px rgba(0, 0, 0, 0.2), 0 6px 32px rgba(0, 0, 0, 0.1)",
@@ -27,28 +35,24 @@ const customStyles = {
     textAlign: "center",
     transition: "transform 1s ease-in-out",
   },
-  overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    zIndex: "1000",
-  },
 };
 
 Modal.setAppElement("#root");
 
 const CheckOutForm = () => {
+  const { user } = useContext(AuthContext);
   const [error, setError] = useState<string>("");
   const [clientSecret, setClientSecret] = useState<string | undefined>(
     undefined
   );
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const stripe = useStripe();
-
-  const { user } = useContext(AuthContext);
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
-  const [cart, refetch] = useCart();
+  const [cart, refetch] = useCart<CartItem>(); // Specify the type for the cart items
   const totalPrice = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total:number, item: CartItem) => total + item.price * item.quantity
+    ,
     0
   );
 
@@ -71,8 +75,9 @@ const CheckOutForm = () => {
         });
     }
   }, [axiosSecure, totalPrice]);
+  
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!stripe || !elements) {
@@ -115,8 +120,8 @@ const CheckOutForm = () => {
         price: totalPrice,
         transationId: paymentIntent.id,
         date: new Date(), // Utc date convert using moment.js // TODo
-        cartIds: cart.map((item) => item._id),
-        productItemIds: cart.map((item) => item.itemId),
+        cartIds: cart.map((item:CartItem) => item._id),
+        productItemIds: cart.map((item:CartItem) => item.itemId),
         status: "pending",
       };
       const res = await axiosSecure.post("/payments", payment);
@@ -141,9 +146,10 @@ const CheckOutForm = () => {
   return (
     <>
       <div className=" mb-10">
-        <p>Total amount: </p>
+       
       </div>
       <form onSubmit={handleSubmit}>
+    <h1 className="mb-5">Use Stripe test card for testing (ex: 4242424242424242 is card number) any future date for MM/YY and any 5 digit for CVC</h1>
         <CardElement
           options={{
             style: {
@@ -157,6 +163,9 @@ const CheckOutForm = () => {
               invalid: {
                 color: "#9e2146",
               },
+            },
+            value: {
+              postalCode: "12345", // Example postal code
             },
           }}
         />
@@ -178,17 +187,23 @@ const CheckOutForm = () => {
         isOpen={reviewModalOpen}
         onRequestClose={handleCloseReviewModal}
         style={customStyles}
-        closeTimeoutMS={1000} 
-        shouldCloseOnOverlayClick={false} 
+        closeTimeoutMS={1000}
+        shouldCloseOnOverlayClick={false}
       >
         <div className="p-4">
-          <h2 className="font-bold text-xl mb-4">Thank You for shopping with us</h2>
+          <h2 className="font-bold text-xl mb-4">
+            Thank You for shopping with us
+          </h2>
           <div className="flex justify-center space-x-4">
             <Link to="/dashboard/addreview">
-              <button className="btn bg-green-500 text-white font-bold text-xl">Add a Review</button>
+              <button className="btn bg-green-500 text-white font-bold text-xl">
+                Add a Review
+              </button>
             </Link>
             <Link to="/">
-              <button className="btn bg-red-500 text-white font-bold text-xl">Back to home</button>
+              <button className="btn bg-red-500 text-white font-bold text-xl">
+                Back to home
+              </button>
             </Link>
           </div>
         </div>

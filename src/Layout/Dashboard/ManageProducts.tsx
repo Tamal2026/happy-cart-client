@@ -6,6 +6,15 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { Link } from "react-router-dom";
 
+// Define the type for a product
+interface Product {
+  _id: string;
+  name: string;
+  img: string;
+  category: string;
+  price: number;
+}
+
 const ManageProducts = () => {
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
@@ -25,7 +34,7 @@ const ManageProducts = () => {
     },
   });
 
-  const handleDelete = (product) => {
+  const handleDelete = (product: Product) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -72,7 +81,7 @@ const ManageProducts = () => {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product, index) => (
+                {products.map((product: Product, index: number) => (
                   <tr key={product._id}>
                     <td>{index + 1}</td>
                     <td>
@@ -86,11 +95,12 @@ const ManageProducts = () => {
                     <td>{product.category}</td>
                     <td>{product.price}</td>
                     <td>
-                    <Link to={`/dashboard/updatedProduct/${product._id}`}>  <button className="rounded-lg bg-sky-600 btn-sm text-white hover:-translate-y-1 transition-transform ease-in">
-                        <FaEdit />
-                      </button></Link>
+                      <Link to={`/dashboard/updatedProduct/${product._id}`}>
+                        <button className="rounded-lg bg-sky-600 btn-sm text-white hover:-translate-y-1 transition-transform ease-in">
+                          <FaEdit />
+                        </button>
+                      </Link>
                     </td>
-
                     <td>
                       <button
                         onClick={() => {
