@@ -1,10 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { AuthContext } from "../../providers/AuthProvider";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import useCart from "../../hooks/useCart";
-import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 
 interface Product {
   name: string;
@@ -16,10 +11,7 @@ interface Product {
 }
 
 const BestSellerProducts = () => {
-  const navigate = useNavigate();
-  const [, refetch] = useCart();
-  const axiosSecure = useAxiosSecure();
-  const { user } = useContext(AuthContext);
+
   const [bestSellerProducts, setBestSellerProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -32,43 +24,6 @@ const BestSellerProducts = () => {
       });
   }, []);
 
-  const handleAddToCart = (product: Product) => {
-    if (user && user.email) {
-      const cartItem = {
-        itemId: product._id,
-        email: user.email,
-        name: product.name,
-        img: product.img,
-        price: product.price,
-      };
-      axiosSecure.post("/cart", cartItem).then((res) => {
-        if (res.data.insertedId) {
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: `${product.name} has been added to the cart`,
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          refetch();
-        }
-      });
-    } else {
-      Swal.fire({
-        title: "You are not Logged In",
-        text: "Please login to add to the cart",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, Login!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate("/login", { state: { from: location } });
-        }
-      });
-    }
-  };
 
   return (
     <div className="my-10">

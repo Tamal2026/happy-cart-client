@@ -4,6 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import { FaUsersGear } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
 const AllUser = () => {
   const axiosSecure = useAxiosSecure();
 
@@ -15,7 +22,7 @@ const AllUser = () => {
     },
   });
 
-  const handleMakeAdmin = (user) => {
+  const handleMakeAdmin = (user:User) => {
     Swal.fire({
       title: "Are you sure?",
       text: `${user.name} will be an admin!`,
@@ -40,7 +47,7 @@ const AllUser = () => {
     });
   };
 
-  const handleDelete = (user) => {
+  const handleDelete = (user:User) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -79,7 +86,7 @@ const AllUser = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
+            {users.map((user:User, index:number) => (
               <tr key={user._id}>
                 <th>{index + 1}</th>
                 <td>{user.name}</td>

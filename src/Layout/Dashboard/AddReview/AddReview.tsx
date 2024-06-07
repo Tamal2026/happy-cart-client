@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext, useState, ChangeEvent } from "react";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
-import { AuthContext } from "../../../providers/AuthProvider";
+import { AuthContext,AuthContextType } from "../../../providers/AuthProvider";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
@@ -8,24 +8,26 @@ const AddReview = () => {
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
   const axiosPublic = useAxiosPublic();
-  const { user } = useContext(AuthContext);
-  const navigate = useNavigate()
+  const authContext = useContext(AuthContext) as AuthContextType;
+  const { user } = authContext;
+  const navigate = useNavigate();
 
-  const handleTextAreaChange = (e) => {
+  const handleTextAreaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setReviewText(e.target.value);
   };
 
-  const handleRatingChange = (newRating) => {
+  const handleRatingChange = (newRating: number) => {
     setRating(newRating);
   };
+
+  const name = user ? user.displayName || "Anonymous" : "Anonymous";
+  const email = user ? user.email || "" : "";
   const reviewData = {
-    name: user ? user.displayName || 'Anonymous' : 'Anonymous',
-    email: user ? user.email || '' : '',
+    name: name,
+    email: email,
     reviewText: reviewText,
     rating: rating,
   };
-  
-  
 
   const handleSubmit = async () => {
     const res = await axiosPublic.post("/reviews", reviewData);
@@ -37,7 +39,7 @@ const AddReview = () => {
         timer: 2000,
       });
     }
-    navigate('/')
+    navigate("/");
     setReviewText("");
     setRating(0);
   };

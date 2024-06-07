@@ -1,33 +1,42 @@
-import { useContext } from "react";
-import { AuthContext } from "../../providers/AuthProvider";
+import React, { useContext, FormEvent } from "react";
+import { AuthContext,AuthContextType } from "../../providers/AuthProvider";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
-const Login = () => {
-  const { signIn } = useContext(AuthContext);
+const Login: React.FC = () => {
+  const authContext = useContext(AuthContext) as AuthContextType;
+const { signIn } = authContext;
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.pathname || "/";
 
-  const handleLogin = (e, email, password) => {
+  const handleLogin = (e: FormEvent, email: string, password: string) => {
     e.preventDefault();
-    signIn(email, password).then((result) => {
-      const user = result.user;
+    signIn(email, password).then(() => {
       navigate(from, { replace: true });
     });
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-cover" style={{ backgroundImage: 'url("https://i.ibb.co/YRwbGVw/signup-bg.png")' }}>
+    <div
+      className="flex items-center justify-center min-h-screen bg-cover"
+      style={{
+        backgroundImage: 'url("https://i.ibb.co/YRwbGVw/signup-bg.png")',
+      }}
+    >
       <div className="max-w-md w-full bg-white shadow-md rounded-md mx-10 ml-10 p-8">
         <div className="text-center lg:text-left">
-          <h1 className="text-2xl text-blue-500 font-bold s mb-4">Login now!</h1>
-        
+          <h1 className="text-2xl text-blue-500 font-bold s mb-4">
+            Login now!
+          </h1>
         </div>
-        <form  onSubmit={handleLogin}>
+        <form onSubmit={(e) => handleLogin(e, (e.target as HTMLFormElement).email.value, (e.target as HTMLFormElement).password.value)}>
           <div className="mb-4 ">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -39,7 +48,10 @@ const Login = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
               Password
             </label>
             <input
@@ -55,8 +67,18 @@ const Login = () => {
           </div>
         </form>
         <div className="flex justify-center items-center">
-          <button className="btn bg-green-500 text-white mr-4" onClick={(e) => handleLogin(e, "user@gmail.com", "User123@")}>User Demo</button>
-          <button className="btn btn-secondary" onClick={(e) => handleLogin(e, "tamalgg@gmail.com", "12345T@t")}>Admin Demo</button>
+          <button
+            className="btn bg-green-500 text-white mr-4"
+            onClick={(e) => handleLogin(e, "user@gmail.com", "User123@")}
+          >
+            User Demo
+          </button>
+          <button
+            className="btn btn-secondary"
+            onClick={(e) => handleLogin(e, "tamalgg@gmail.com", "12345T@t")}
+          >
+            Admin Demo
+          </button>
         </div>
         <div className="mt-4 text-center">
           <h1>

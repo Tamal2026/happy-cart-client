@@ -1,20 +1,23 @@
 import { useContext } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../providers/AuthProvider";
+import { AuthContext ,AuthContextType} from "../../providers/AuthProvider";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+
 
 type Inputs = {
   name: string;
   email: string;
-  password: number | string;
+  password: string;
 };
 
+
 const SignUp = () => {
-  const axiosPublic = useAxiosPublic()
-  const navigate = useNavigate()
-  const { createUser, updateUserProfile } = useContext(AuthContext);
+  const axiosPublic = useAxiosPublic();
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext) as AuthContextType;
+  const { createUser,updateUserProfile } = authContext;
 
   const {
     register,
@@ -22,41 +25,35 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+  
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
-   
     createUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;
       console.log(loggedUser)
-   
-      updateUserProfile(data.name)
-        .then(() => {
-          const userInfo = {
-            name: data.name,
-            email:data.email
+      updateUserProfile(data.name).then(() => {
+        const userInfo = {
+          name: data.name,
+          email: data.email,
+        };
+
+        axiosPublic.post("/users", userInfo).then((res) => {
+          if (res.data.insertedId) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            navigate("/");
+            reset();
           }
+        });
 
-axiosPublic.post('/users',userInfo)
-.then(res =>{
-  if(res.data.insertedId){
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Your work has been saved",
-      showConfirmButton: false,
-      timer: 1500
-    });
-
-    navigate('/')
-    reset()
-  }
-})
-
-         
-          reset();
-          navigate('/')
-        })
-        .catch((error) => console.log(error));
+        reset();
+        navigate("/");
+      });
     });
   };
 
@@ -65,8 +62,6 @@ axiosPublic.post('/users',userInfo)
       <div className="hero min-h-screen bg-cover" style={{ backgroundImage: 'url("https://i.ibb.co/pQ1fM6J/gg-g.jpg")' }}>
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
-            
-           
           </div>
           <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">

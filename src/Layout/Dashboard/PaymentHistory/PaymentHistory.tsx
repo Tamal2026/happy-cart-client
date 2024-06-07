@@ -1,15 +1,21 @@
 import { useContext } from "react";
-import { AuthContext } from "../../../providers/AuthProvider";
+import { AuthContext ,AuthContextType} from "../../../providers/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
+interface FormData{
+  _id:string;
+  transationId:string;
+  price:number;
+}
 const PaymentHistory = () => {
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext) as AuthContextType;
+  const { user } = authContext;
   const axiosSecure = useAxiosSecure();
   const { data: payments = [] } = useQuery({
     queryKey: ["payments", user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/payments/${user.email}`);
+      const res = await axiosSecure.get(`/payments/${user?.email}`);
       return res.data;
     },
   });
@@ -41,7 +47,7 @@ const PaymentHistory = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {payments.map((payment, index) => (
+              {payments.map((payment:FormData, index:number) => (
                 <tr key={payment._id}>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
                     {index + 1}

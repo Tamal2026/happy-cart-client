@@ -1,8 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useState } from "react";
 import { FaAngleDoubleDown } from "react-icons/fa";
 
 const FAQ = () => {
-  const [openQuestion, setOpenQuestion] = useState(null);
+  const [openQuestion, setOpenQuestion] = useState<number | null>(null); // Specify type
 
   const faqData = [
     {
@@ -28,7 +29,7 @@ const FAQ = () => {
       <div className="space-y-4">
         {faqData.map((faq, index) => (
           <div key={index} className="border rounded p-4">
-            {/* Question */}
+           
             <button
               className="flex justify-between w-full text-left font-semibold"
               onClick={() =>

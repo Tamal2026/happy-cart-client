@@ -1,17 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useContext } from "react";
-import { AuthContext } from "../../../providers/AuthProvider";
+import { AuthContext,AuthContextType } from "../../../providers/AuthProvider";
 import Swal from "sweetalert2";
+
+interface Wish {
+  _id: string;
+  name: string;
+  img: string;
+  price: number;
+  // Add other properties if necessary
+}
 
 const WishList = () => {
   const axiosSecure = useAxiosSecure();
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext) as AuthContextType;
+  const { user } = authContext;
 
   const { data: wishData = [], refetch } = useQuery({
     queryKey: ["wishData"],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/wishlist/?email=${user.email}`);
+      const res = await axiosSecure.get(`/wishlist/?email=${user?.email}`);
       return res.data;
     },
   });
@@ -56,7 +65,7 @@ const WishList = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {wishData.map((wish, index:number) => (
+            {wishData.map((wish:Wish, index:number) => (
               <tr key={wish._id}>
                 <td className="px-2 sm:px-4 py-3 whitespace-nowrap">{index + 1}</td>
                 <td className="px-2 sm:px-4 py-3 whitespace-nowrap">

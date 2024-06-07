@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FaCartPlus, FaRegPlusSquare } from "react-icons/fa";
-import { AuthContext } from "../../../providers/AuthProvider";
+import { AuthContext ,AuthContextType} from "../../../providers/AuthProvider";
 
 import Swal from "sweetalert2";
 import Modal from "react-modal";
@@ -21,8 +21,19 @@ interface Product {
   ItemId: string;
   quantity: number;
 }
+interface ProductModalProps {
+  product: Product;
+  isOpen: boolean;
+  onRequestClose: () => void;
+  handleAddToCart: (product: Product, quantity: number) => void;
+}
 
-const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
+const ProductModal: React.FC<ProductModalProps> = ({
+  product,
+  isOpen,
+  onRequestClose,
+  handleAddToCart,
+}) => {
   const [quantity, setQuantity] = useState<number>(1);
 
   const incrementQuantity = () => {
@@ -43,13 +54,9 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
       className="fixed inset-0 flex items-center justify-center z-50"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
     >
-      <div className="bg-white rounded-lg shadow-lg w-full sm:w-96  p-6">
+      <div className="bg-white rounded-lg shadow-lg w-full sm:w-96 p-6">
         <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
-        <img
-          className="h-56 w-full mb-4 object-cover"
-          src={product.img}
-          alt=""
-        />
+        <img className="h-56 w-full mb-4 object-cover" src={product.img} alt="" />
         <p className="mb-2">Category: {product.category}</p>
         <p className="mb-2">Price: ${product.price} / kg</p>
 
@@ -75,7 +82,7 @@ const ProductModal = ({ product, isOpen, onRequestClose, handleAddToCart }) => {
         <div className="flex justify-between">
           <button
             onClick={() => handleAddToCart(product, quantity)}
-            className="btn  text-white font-bold py-2 px-4 rounded bg-blue-500"
+            className="btn text-white font-bold py-2 px-4 rounded bg-blue-500"
           >
             Add to Cart
           </button>
@@ -97,7 +104,8 @@ const AllProducts = () => {
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
   const [isAdmin] = useAdmin();
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext) as AuthContextType;
+  const { user } = authContext;
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -116,7 +124,7 @@ const AllProducts = () => {
     setModalIsOpen(false);
   };
 
-  const handleAddToCart = (product: Product, quantity) => {
+  const handleAddToCart = (product: Product, quantity:number) => {
     if (user && user.email) {
       const cartItem = {
         itemId: product._id,

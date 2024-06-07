@@ -1,22 +1,30 @@
 import { useContext } from "react";
-import { AuthContext } from "../../../providers/AuthProvider";
+import { AuthContext,AuthContextType } from "../../../providers/AuthProvider";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 
+interface Order{
+  price:number;
+}
+
 const UserOverview = () => {
-  const { user } = useContext(AuthContext);
+
+  const authContext = useContext(AuthContext) as AuthContextType;
+  const { user } = authContext;
+  
   const axiosSecure = useAxiosSecure();
 
-  const { data: userData = [], isLoading: isUserData } = useQuery({
+  const { data: userData = [], } = useQuery({
     queryKey: ["userData"],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/userOverview/?email=${user.email}`);
+      const res = await axiosSecure.get(`/userOverview/?email=${user?.email}`);
       return res.data;
     },
   });
 
   // Calculate total price spent on all orders
-  const totalPrice = userData.reduce((total, order) => total + order.price, 0);
+  const totalPrice = userData.reduce((total: number, order: Order) => total + order.price, 0);
+
 
   return (
     <div className="max-w-screen-md mx-auto mb-8 px-4 sm:px-6 lg:px-8">

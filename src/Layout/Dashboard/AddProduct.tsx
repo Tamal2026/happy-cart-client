@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
@@ -6,13 +6,22 @@ import Swal from "sweetalert2";
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
+interface FormData {
+  name: string;
+  category: string;
+  price: number;
+  short_desc: string;
+  image: File[]; // Define image as File type
+}
+
+
 const AddProduct = () => {
   const axiosSecure = useAxiosSecure();
 
   const axiosPublic = useAxiosPublic();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm<FormData>();
 
-  const onSubmit = async (data) => {
+  const onSubmit:SubmitHandler<FormData> = async (data:FormData) => {
     const imageFile = { image: data.image[0] };
     const res = await axiosPublic.post(image_hosting_api, imageFile, {
       headers: {
@@ -23,12 +32,12 @@ const AddProduct = () => {
       const productData = {
         name: data.name,
         category: data.category,
-        price: parseFloat(data.price),
+        price: (data.price), 
         short_desc: data.short_desc,
         img: res.data.data.display_url,
       };
       const ProductRes = await axiosSecure.post("/all-products", productData);
-
+  
       Swal.fire({
         title: "Are you sure?",
         text: `${productData.name} item will be add`,
@@ -50,10 +59,10 @@ const AddProduct = () => {
         }
       });
     }
-
+  
     reset();
   };
-
+  
   return (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-4">Add Product</h2>

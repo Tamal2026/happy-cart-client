@@ -1,12 +1,16 @@
 import { useContext } from "react";
 import { FaGoogle } from "react-icons/fa6";
 import "tailwindcss/tailwind.css";
-import { AuthContext } from "../../../providers/AuthProvider";
+import { AuthContext,AuthContextType } from "../../../providers/AuthProvider";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useNavigate } from "react-router-dom";
 
+ 
+
+
 const SocialLogin = () => {
-  const { googleSignIn } = useContext(AuthContext);
+  const authContext = useContext(AuthContext) as AuthContextType;
+  const { googleSignIn } = authContext;
   const navigate = useNavigate()
 
   const axiosPublic = useAxiosPublic();

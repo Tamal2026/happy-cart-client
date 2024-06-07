@@ -1,10 +1,18 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+
+interface Product {
+  img: string;
+  price: number;
+  name: string;
+  long_description?: string;
+  long_desc?: string;
+  short_desc?: string;
+}
 
 const ProductDetails = () => {
-  const { id, } = useParams();
-  const [product, setProduct] = useState(null);
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -35,17 +43,25 @@ const ProductDetails = () => {
     <div>
       <div className="hero  bg-base-200">
         <div className="hero-content flex-col lg:flex-row-reverse">
-          <img
-            src={product.img}
-            className="max-w-sm rounded-lg shadow-2xl"
-          />
+          <img src={product.img} className="max-w-sm rounded-lg shadow-2xl" />
           <div>
             <h1 className="text-5xl font-bold">{product.name}</h1>
-            <h1 className="text-xl font-semi-bold my-3">Price : {product.price}/kg</h1>
-            <p className="py-6"><span className="text-green-500 text-xl">Description : </span>
-           {product.long_description || product.long_desc || short_desc}
+            <h1 className="text-xl font-semi-bold my-3">
+              Price : {product.price}/kg
+            </h1>
+            <p className="py-6">
+              <span className="text-green-500 text-xl">Description : </span>
+              {product.long_description ||
+                product.long_desc ||
+                product.short_desc}
             </p>
-           <Link to="/shop"> <button className="btn bg-blue-500 text-white font-semibold">Back to shop</button></Link>
+
+            <Link to="/shop">
+              {" "}
+              <button className="btn bg-blue-500 text-white font-semibold">
+                Back to shop
+              </button>
+            </Link>
           </div>
         </div>
       </div>

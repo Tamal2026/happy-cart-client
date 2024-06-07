@@ -6,7 +6,7 @@ import Contact from "../pages/Contact/Contact";
 import SignUp from "../pages/SignUp/SignUp";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import Dashboard from "../Layout/Dashboard/Dashboard";
-import PurchasedHistory from "../Layout/Dashboard/PurchasedHistory";
+
 import Cart from "../Layout/Dashboard/Cart";
 
 import AllUser from "../Layout/Dashboard/AllUser";
@@ -87,11 +87,6 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard></Dashboard>,
     children: [
-      {
-        path: "purchasedHistory",
-
-        element: <PurchasedHistory></PurchasedHistory>,
-      },
       {
         path: "payment",
         element: <Payment></Payment>,

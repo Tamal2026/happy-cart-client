@@ -1,11 +1,12 @@
+
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { FaMoneyCheckAlt } from "react-icons/fa";
-import { FaShop, FaTruckArrowRight, FaUsers } from "react-icons/fa6";
+import { FaMoneyCheckAlt, FaUsers } from "react-icons/fa";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid } from "recharts";
+import './admin.css';
+import { FaShop, FaTruckArrowRight } from "react-icons/fa6";
 
 const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "red", "pink"];
-import './admin.css'
 
 const AdminOverview = () => {
   const axiosSecure = useAxiosSecure();
@@ -31,7 +32,7 @@ const AdminOverview = () => {
   });
 
   // Custom shape for the bar chart
-  const getPath = (x, y, width, height) => {
+  const getPath = (x: number, y: number, width: number, height: number) => {
     return `M${x},${y + height}C${x + width / 3},${y + height} ${
       x + width / 2
     },${y + height / 3}
@@ -42,8 +43,14 @@ const AdminOverview = () => {
   Z`;
   };
 
-  const TriangleBar = (props) => {
-    const { fill, x, y, width, height } = props;
+  const TriangleBar = (props: {
+    fill?: string;
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+  }) => {
+    const { fill = "#8884d8", x = 0, y = 0, width = 0, height = 0 } = props;
     return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
   };
 
@@ -100,7 +107,7 @@ const AdminOverview = () => {
               shape={<TriangleBar />}
               label={{ position: "top" }}
             >
-              {chartData.map((data, index) => (
+              {chartData.map((index:number) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={colors[index % colors.length]}

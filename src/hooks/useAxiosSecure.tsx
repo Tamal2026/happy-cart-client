@@ -1,14 +1,15 @@
 import axios from "axios";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../providers/AuthProvider";
+import { AuthContext,AuthContextType } from "../providers/AuthProvider";
 
 const axiosSecure = axios.create({
   baseURL: "https://happy-cart-server.vercel.app",
 });
 
 const useAxiosSecure = () => {
-  const { logOut } = useContext(AuthContext);
+  const authContext = useContext(AuthContext) as AuthContextType;
+  const { logOut } = authContext;
   const navigate = useNavigate();
 
   axiosSecure.interceptors.request.use(

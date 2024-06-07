@@ -1,4 +1,4 @@
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, FieldValues } from "react-hook-form";
 import { useLoaderData } from "react-router-dom";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
@@ -12,6 +12,7 @@ interface ProductData {
   img: string;
   _id: string;
 }
+
 interface FormData {
   name: string;
   category: string;
@@ -30,11 +31,11 @@ const UpdatedProduct = () => {
   // Explicitly typing the response of useLoaderData()
   const { name, category, price, short_desc, img, _id } = useLoaderData() as ProductData;
 
+  const { register, handleSubmit } = useForm<FieldValues>();
 
-  const { register, handleSubmit } = useForm();
-
-  const onSubmit :SubmitHandler<FormData> = async (data:FormData) => {
-    const imageFile = { image: data.image[0] };
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const formData = data as FormData;
+    const imageFile = { image: formData.image[0] };
     const res = await axiosPublic.post(image_hosting_api, imageFile, {
       headers: {
         "content-type": "multipart/form-data",
@@ -42,10 +43,10 @@ const UpdatedProduct = () => {
     });
     if (res.data.success) {
       const productData = {
-        name: data.name,
-        category: data.category,
-        price: parseFloat(data.price),
-        short_desc: data.short_desc,
+        name: formData.name,
+        category: formData.category,
+        price: formData.price,
+        short_desc: formData.short_desc,
         img: res.data.data.display_url,
       };
 

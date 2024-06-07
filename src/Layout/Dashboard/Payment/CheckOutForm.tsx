@@ -1,8 +1,8 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import {  useContext, useEffect, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
-import { AuthContext } from "../../../providers/AuthProvider";
+import { AuthContext,AuthContextType } from "../../../providers/AuthProvider";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import Modal from "react-modal";
@@ -15,7 +15,7 @@ interface CartItem {
   quantity: number;
 }
 
-const customStyles = {
+const customStyles= {
   content: {
     top: "50%",
     left: "50%",
@@ -32,15 +32,17 @@ const customStyles = {
     color: "#333333",
     fontSize: "1rem",
     lineHeight: "1.5",
-    textAlign: "center",
+    textAlign: "center" as const, // Ensure textAlign matches TextAlign | undefined
     transition: "transform 1s ease-in-out",
   },
 };
 
+
 Modal.setAppElement("#root");
 
 const CheckOutForm = () => {
-  const { user } = useContext(AuthContext);
+  const authContext = useContext(AuthContext) as AuthContextType;
+  const { user } = authContext;
   const [error, setError] = useState<string>("");
   const [clientSecret, setClientSecret] = useState<string | undefined>(
     undefined
@@ -49,7 +51,7 @@ const CheckOutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
-  const [cart, refetch] = useCart<CartItem>(); // Specify the type for the cart items
+  const [cart, refetch] = useCart(); // Specify the type for the cart items
   const totalPrice = cart.reduce(
     (total:number, item: CartItem) => total + item.price * item.quantity
     ,
@@ -73,59 +75,75 @@ const CheckOutForm = () => {
           console.error("Error fetching client secret:", error);
           setError("Failed to fetch client secret");
         });
+    } else {
+      // If totalPrice is not greater than 0, reset the client secret
+      setClientSecret(undefined);
     }
   }, [axiosSecure, totalPrice]);
+  
   
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     if (!stripe || !elements) {
       return;
     }
+  
     const card = elements.getElement(CardElement);
     if (card === null) {
       return;
     }
+  
+    if (clientSecret === undefined) {
+      // Handle the case where clientSecret is undefined
+      setError("Client secret is not defined");
+      return;
+    }
+  
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
+  
     if (error) {
       console.log("[error from payment method]", error);
-      setError(error.message);
-    } else {
-      console.log("Payment Method", paymentMethod);
-      setError("");
+     
+      return;
     }
-
-    const { paymentIntent, error: ConfirmError } =
-      await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: card,
-          billing_details: {
-            email: user.email || "anonymous",
-            name: user?.displayName || "anonymous",
-          },
+  
+    console.log("Payment Method", paymentMethod);
+    setError("");
+  
+    const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: card,
+        billing_details: {
+          email: user?.email || "anonymous",
+          name: user?.displayName || "anonymous",
         },
-      });
-    if (ConfirmError) {
-      console.log("Confirm error");
+      },
+    });
+  
+    if (confirmError) {
+      console.log("Confirm error", confirmError);
     } else {
       console.log("payment intent", paymentIntent);
-
+  
       const payment = {
-        email: user.email,
-        name: user.displayName,
+        email: user?.email,
+        name: user?.displayName,
         price: totalPrice,
         transationId: paymentIntent.id,
         date: new Date(), // Utc date convert using moment.js // TODo
-        cartIds: cart.map((item:CartItem) => item._id),
-        productItemIds: cart.map((item:CartItem) => item.itemId),
+        cartIds: cart.map((item: CartItem) => item._id),
+        productItemIds: cart.map((item: CartItem) => item.itemId),
         status: "pending",
       };
+  
       const res = await axiosSecure.post("/payments", payment);
       refetch();
+  
       if (res.data?.paymentResult?.insertedId) {
         Swal.fire({
           icon: "success",
@@ -138,6 +156,7 @@ const CheckOutForm = () => {
       }
     }
   };
+  
 
   const handleCloseReviewModal = () => {
     setReviewModalOpen(false);

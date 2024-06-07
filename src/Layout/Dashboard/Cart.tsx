@@ -17,7 +17,7 @@ interface CartItem {
 
 const Cart = () => {
   const axiosSecure = useAxiosSecure();
-  const [cart, refetchCart] = useCart<CartItem>();
+  const [cart, refetchCart] = useCart();
   const [quantities, setQuantities] = useState<number[]>([]);
 
   useEffect(() => {

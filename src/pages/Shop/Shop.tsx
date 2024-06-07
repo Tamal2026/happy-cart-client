@@ -1,17 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
-import ProductDetails from "./ProductDetails";
 import { Link } from "react-router-dom";
 
+interface Product {
+  _id: string;
+  name: string;
+  img: string;
+  price: number;
+  category: string;
+}
+
 const Shop = () => {
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const axiosPublic = useAxiosPublic();
   const productsPerPage = 6;
 
-  const { data: products = [] } = useQuery({
+  const { data: products = [] } = useQuery<Product[]>({
     queryKey: ["products"],
     queryFn: async () => {
       const res = await axiosPublic.get("/all-products");
@@ -37,15 +44,15 @@ const Shop = () => {
     indexOfLastProduct
   );
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const handleOptionChange = (e) => {
+  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedProduct(
       e.target.value === "allProducts" ? null : e.target.value
     );
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
@@ -142,7 +149,7 @@ const Shop = () => {
             className="border border-green-500 rounded-md px-4 py-2 w-full md:w-9/12 my-3  pr-10"
           />
           <div className="grid grid-cols-1 mx-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-2">
-            {currentProducts.map((product) => (
+            {currentProducts.map((product: Product) => (
               <div
                 key={product._id}
                 className="card bg-transparent-glass w-full h-96 hover:shadow-gray-500 shadow-2xl bg-base-100 bg-opacity-75"

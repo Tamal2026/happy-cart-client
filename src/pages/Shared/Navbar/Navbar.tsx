@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { AuthContext } from "../../../providers/AuthProvider";
+import { AuthContext,AuthContextType } from "../../../providers/AuthProvider";
 import { BiRightArrow } from "react-icons/bi";
 import { FaCartShopping } from "react-icons/fa6";
 import useCart from "../../../hooks/useCart";
@@ -11,11 +11,12 @@ import useAdmin from "../../../hooks/useAdmin";
 const Navbar = () => {
   const [cart] = useCart();
   const [isAdmin] = useAdmin();
-  const { user, logOut } = useContext(AuthContext);
+  const authContext = useContext(AuthContext) as AuthContextType;
+const { user,logOut } = authContext;
 
-  const handleLogOut = () => {
-    logOut(user).then(() => {});
-  };
+const handleLogOut = () => {
+  logOut().then(() => {});
+};
 
   return (
     <div className="max-w-screen-2xl mx-auto">
@@ -86,7 +87,7 @@ const Navbar = () => {
           </div>
           <Link to="/">
             <img
-              src="../../../../public/assets/logomain.png"
+              src="https://i.ibb.co/rwY4jPD/logomain.png"
               className="h-[150px] w-[190px]"
               alt=""
             />
