@@ -1,6 +1,5 @@
 Live Link : https://happy-cart-client.vercel.app
-* Feature Added this project 
-* User Side Features...
+# User Side Features...
 
 1. USer can add Product wishlist for future buying. (also can remove from the wishlist)
 2. USer can pay their product price by stripe payment gateway
