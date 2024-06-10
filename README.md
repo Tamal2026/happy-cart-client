@@ -1,30 +1,18 @@
-# React + TypeScript + Vite
+Live Link : https://happy-cart-client.vercel.app
+* Feature Added this project 
+* User Side Features...
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. USer can add Product wishlist for future buying. (also can remove from the wishlist)
+2. USer can pay their product price by stripe payment gateway
+3. User can search product by name
+4. User can show their lifetime order and spend in their dashboard
+5. user can see their payment history in dasboard
 
-Currently, two official plugins are available:
+* Admin side Features ....
+1.Admin can see diffent dashboard after login..(use jwt token  for authentication)
+2.Admin can not but product or add product in the wishlist.
+3.Admin can see life time sales , order, and totaluser and products in their dashboard
+4.Admin can manage product and add product , delete product and update the product details
+5.Admin can see all users and make a local user make admin.. and delete user...
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Full project in responsive for the mobile and tablet devices using tailwind css..
