@@ -8,11 +8,13 @@ Live Link : https://happy-cart-client.vercel.app
 4. User can show their lifetime order and spend in their dashboard
 5. user can see their payment history in dasboard
 
-* Admin side Features ....
-1.Admin can see diffent dashboard after login..(use jwt token  for authentication)
-2.Admin can not but product or add product in the wishlist.
-3.Admin can see life time sales , order, and totaluser and products in their dashboard
-4.Admin can manage product and add product , delete product and update the product details
-5.Admin can see all users and make a local user make admin.. and delete user...
+# Admin Side Features
+
+1. Admin can see different dashboard after login. (use JWT token for authentication)
+2. Admin cannot buy products or add products to the wishlist.
+3. Admin can see lifetime sales, orders, total users, and products in their dashboard.
+4. Admin can manage products: add products, delete products, and update product details.
+5. Admin can see all users and make a local user an admin, and delete users.
+
 
 Full project in responsive for the mobile and tablet devices using tailwind css..
