@@ -1,4 +1,4 @@
-Live Link : https://happy-cart-client.vercel.app
+*Live Link : https://happy-cart-client.vercel.app
 # User Side Features...
 
 1. USer can add Product wishlist for future buying. (also can remove from the wishlist)
@@ -17,3 +17,5 @@ Live Link : https://happy-cart-client.vercel.app
 
 
 Full project in responsive for the mobile and tablet devices using tailwind css..
+
+* server Side Repo : https://github.com/Tamal2026/happy-cart-serverr
